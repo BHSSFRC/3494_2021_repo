@@ -203,7 +203,7 @@ public class Shooter extends SubsystemBase {
         // hood = "long piston"
         // limiter = "pancake"
 
-        System.out.println("Current Pos: " + this.currentPosition + " Goal Pos: " + position);
+        //System.out.println("Current Pos: " + this.currentPosition + " Goal Pos: " + position);
         if (position != this.currentPosition) {
             this.limiter.set(DoubleSolenoid.Value.kReverse);
             this.hood.set(DoubleSolenoid.Value.kReverse);

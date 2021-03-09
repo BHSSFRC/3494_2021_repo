@@ -11,7 +11,7 @@ import frc.robot.subsystems.Magazine;
 public class RunHopperMagazine extends ParallelCommandGroup {
     public RunHopperMagazine() {
         super(new RunHopper(),
-                new RunMagazine(true, true));
+                new RunMagazine(true, false, true, false));
     }
 
     @Override

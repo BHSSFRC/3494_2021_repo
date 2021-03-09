@@ -6,7 +6,7 @@ import frc.robot.OI;
 import frc.robot.RobotConfig;
 import frc.robot.subsystems.DriveTrain;
 
-//Arcade Drive
+//Rocket League Drive
 public class Drive extends CommandBase {
 
     public Drive() {
@@ -19,26 +19,14 @@ public class Drive extends CommandBase {
 
     @Override
     public void execute() {
-        /*double xSpeed = powerCurve(OI.getINSTANCE().getPrimaryXboxRightTrigger() - OI.getINSTANCE().getPrimaryXboxLeftTrigger());
-        double zRotation = OI.getINSTANCE().getPrimaryXboxLeftX();
-        if(zRotation > 0.1){
-            zRotation = .9;
-        }else if(zRotation < -0.1){
-            zRotation = -.9;
-        }
-        if(OI.getINSTANCE().getPrimaryXboxA()){
-            xSpeed *= 0.2;
-            //zRotation *= 0.2;
-        }else{
-            xSpeed *= SmartDashboard.getNumber("Drive Max Power", 1.0);
-            //zRotation *= SmartDashboard.getNumber("Drive Max Power", 1.0);
-        }
-        DriveTrain.getInstance().arcadeDrive(xSpeed, zRotation, false);*/
+        double speed = OI.getINSTANCE().getPrimaryXboxRightTrigger() - OI.getINSTANCE().getPrimaryXboxLeftTrigger();
+        double rotation = OI.getINSTANCE().getPrimaryXboxLeftX();
 
-        double leftSpeed = powerCurve(OI.getINSTANCE().getLeftFlightY());
-        double rightSpeed = powerCurve(OI.getINSTANCE().getRightFlightY());
+        speed *= SmartDashboard.getNumber("Drive Max Power", 1.0);
 
-        DriveTrain.getInstance().tankDrive(leftSpeed, rightSpeed);
+        if (OI.getINSTANCE().getPrimaryXboxA()) speed *= SmartDashboard.getNumber("Slow Mode Percent", 0.2);
+
+        DriveTrain.getInstance().arcadeDrive(speed, rotation, false);
     }
 
     private static double powerCurve(double x) {

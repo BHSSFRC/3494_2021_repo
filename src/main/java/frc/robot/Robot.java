@@ -14,9 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.commands.RunIntake;
-import frc.robot.commands.RunMagazine;
-import frc.robot.commands.Shoot;
+import frc.robot.commands.*;
 import frc.robot.commands.drive.Drive;
 import frc.robot.commands.turret.SpinTurret;
 import frc.robot.sensors.Linebreaker;
@@ -69,8 +67,11 @@ public class Robot extends TimedRobot {
         CommandScheduler.getInstance().setDefaultCommand(Intake.getInstance(), new RunIntake());
         CommandScheduler.getInstance().setDefaultCommand(Turret.getInstance(), new SpinTurret());
         CommandScheduler.getInstance().setDefaultCommand(DriveTrain.getInstance(), new Drive());
+        
+        CommandScheduler.getInstance().setDefaultCommand(Hopper.getInstance(), new TeleopHopper());
+        CommandScheduler.getInstance().setDefaultCommand(Magazine.getInstance(), new TeleopMagazine());
 
-        CommandScheduler.getInstance().setDefaultCommand(Magazine.getInstance(), new RunMagazine());
+        //CommandScheduler.getInstance().setDefaultCommand(Magazine.getInstance(), new RunMagazine());
 
         CommandScheduler.getInstance().schedule(new InstantCommand(Pneumatics.getInstance()::startCompressor));
 

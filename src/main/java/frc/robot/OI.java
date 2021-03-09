@@ -58,7 +58,7 @@ public class OI {
         bb = new ButtonBoard(RobotMap.OI.BUTTON_BOARD);
         boardButtons = new JoystickButton[15];
 
-        ejectBalls = new JoystickButton(bb, RobotMap.OI.EJECT_BALLS);
+        /*ejectBalls = new JoystickButton(bb, RobotMap.OI.EJECT_BALLS);
         ejectBalls.whenPressed(new InstantCommand(() -> new ReverseIntake().withInterrupt(() -> !ejectBalls.get()).schedule(false)));
 
         runShooter = new JoystickButton(secondaryXbox, RobotMap.OI.RUN_SHOOTER);
@@ -92,8 +92,7 @@ public class OI {
         extendClimber.whileActiveContinuous(new DriveClimb(RobotMap.CLIMBER.CLIMB_UP_POWER));
 
         intakingRoutine = new JoystickButton(bb, RobotMap.OI.INTAKING_ROUTINE);
-        intakingRoutine.whenPressed(new IntakingRoutine().withTimeout(10).andThen(
-                new InstantCommand(() -> System.out.println("Finish Intaking Routine"))));
+        intakingRoutine.whenPressed(new IntakingRoutine().withTimeout(10).andThen(new InstantCommand(() -> System.out.println("Finish Intaking Routine"))));
 
         spinHopperMagazine = new JoystickButton(secondaryXbox, RobotMap.OI.SPIN_HOPPER_MAGAZINE);
         spinHopperMagazine.whenPressed(new RunHopperMagazine());
@@ -109,7 +108,7 @@ public class OI {
         shooterHigh.whenActive(new InstantCommand(() -> Shooter.getInstance().setPosition(Shooter.Position.THREE)));
 
         aimAndShoot = new JoystickButton(bb, RobotMap.OI.AIM_AND_SHOOT);
-        aimAndShoot.whileHeld(new AimAndShoot(5).withInterrupt(() -> !this.aimAndShoot.get()));
+        aimAndShoot.whileHeld(new AimAndShoot(5).withInterrupt(() -> !this.aimAndShoot.get()));*/
     }
 
     public double getLeftFlightY(){
@@ -118,6 +117,14 @@ public class OI {
 
     public double getRightFlightY(){
         return this.rightFlight.getY();
+    }
+
+    public double getLeftFlightX(){
+        return this.leftFlight.getX();
+    }
+
+    public double getRightFlightX(){
+        return this.rightFlight.getX();
     }
 
     public double getPrimaryXboxLeftTrigger(){

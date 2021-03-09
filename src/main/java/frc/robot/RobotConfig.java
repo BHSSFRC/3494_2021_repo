@@ -58,7 +58,7 @@ public final class RobotConfig
         public static double BOTTOM_MOTOR_DEFAULT_POWER = SmartDashboard.getNumber("Bottom Magazine Power", 0.7);
         public static double HOPPER_DEFAULT_POWER = SmartDashboard.getNumber("Hopper Power", 0.8);
         public static double INTAKE_DEFAULT_POWER = 0.6;
-        public static double TIME_AFTER_2ND_LINEBREAK_SENSOR = 0;
+        public static double TIME_FOR_REVERSE = 0.1;
     }
 
     public static class SHOOTER {
