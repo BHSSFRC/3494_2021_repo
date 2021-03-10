@@ -49,8 +49,8 @@ public class OI {
     private JoystickButton[] boardButtons;
 
     private OI(){
-        leftFlight = new Joystick(RobotMap.OI.LEFT_FLIGHT);
-        rightFlight = new Joystick(RobotMap.OI.RIGHT_FLIGHT);
+        //leftFlight = new Joystick(RobotMap.OI.LEFT_FLIGHT);
+        //rightFlight = new Joystick(RobotMap.OI.RIGHT_FLIGHT);
 
         primaryXbox = new XboxController(RobotMap.OI.PRIMARY_XBOX);
         secondaryXbox = new XboxController(RobotMap.OI.SECONDARY_XBOX);
@@ -58,15 +58,19 @@ public class OI {
         bb = new ButtonBoard(RobotMap.OI.BUTTON_BOARD);
         boardButtons = new JoystickButton[15];
 
-        /*ejectBalls = new JoystickButton(bb, RobotMap.OI.EJECT_BALLS);
+        ejectBalls = new JoystickButton(bb, RobotMap.OI.EJECT_BALLS);
         ejectBalls.whenPressed(new InstantCommand(() -> new ReverseIntake().withInterrupt(() -> !ejectBalls.get()).schedule(false)));
 
         runShooter = new JoystickButton(secondaryXbox, RobotMap.OI.RUN_SHOOTER);
         runShooter.whileHeld(new Shoot());
 
+        intakingRoutine = new JoystickButton(secondaryXbox, RobotMap.OI.INTAKING_ROUTINE);
+        intakingRoutine.whenPressed(new IntakingRoutine().withTimeout(10).andThen(new InstantCommand(() -> System.out.println("Finish Intaking Routine"))));
+
+/*
         floorPickup = new JoystickButton(bb, RobotMap.OI.FLOOR_PICKUP);
         floorPickup.whileHeld(new FloorPickup());
-
+        
         //quickTurretLimits = new JoystickButton(bb, RobotMap.OI.QUICK_TURRET_LIMITS);
         //quickTurretLimits.whenPressed(new QuickTurretLimit());
         enableAimbot = new JoystickButton(bb, RobotMap.OI.ENABLE_AIM_BOT);
