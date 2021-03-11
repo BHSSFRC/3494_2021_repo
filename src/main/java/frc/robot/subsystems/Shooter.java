@@ -207,12 +207,13 @@ public class Shooter extends SubsystemBase {
         if (position != this.currentPosition) {
             this.limiter.set(DoubleSolenoid.Value.kReverse);
             this.hood.set(DoubleSolenoid.Value.kReverse);
-            Timer.delay(500E-3);
+            Timer.delay(0.5);
 
             switch(position){
                 case TWO:
                     this.hood.set(DoubleSolenoid.Value.kForward);
-                    Timer.delay(100E-3);
+                    //Timer.delay(0.5);
+                    Timer.delay(0.075);
                     this.limiter.set(DoubleSolenoid.Value.kForward);
                     break;
                 case THREE:

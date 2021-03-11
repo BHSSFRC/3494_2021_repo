@@ -23,22 +23,24 @@ public class Drive extends CommandBase {
         double rotation_factor = 0.8;
 
         //Emerson Rocket League Drive
-        double speed = -1*(OI.getINSTANCE().getPrimaryXboxRightTrigger() - OI.getINSTANCE().getPrimaryXboxLeftTrigger());
-        double rotation = OI.getINSTANCE().getPrimaryXboxLeftX();
-        speed *= SmartDashboard.getNumber("Drive Max Power", 1.0);
-        
-         // Brock Arcade Drive Xbox
-         //double speed = OI.getINSTANCE().getPrimaryXboxLeftY();
-         //double rotation = OI.getINSTANCE().getPrimaryXboxLeftX();
+        String driveScheme = SmartDashboard.getString("Controls/Drive Scheme", "Bork");
 
-        if (OI.getINSTANCE().getPrimaryXboxA()) speed *= SmartDashboard.getNumber("Slow Mode Percent", 0.2);
+        double speed = 0;
+        double rotation = 0;
+
+        if (driveScheme.equals(RobotConfig.DRIVE.DRIVE_SCHEMES[0])) {
+            speed = OI.getINSTANCE().getPrimaryXboxLeftY();
+            rotation = OI.getINSTANCE().getPrimaryXboxLeftX();
+        } else if (driveScheme.equals(RobotConfig.DRIVE.DRIVE_SCHEMES[1])) {
+            speed = -1*(OI.getINSTANCE().getPrimaryXboxRightTrigger() - OI.getINSTANCE().getPrimaryXboxLeftTrigger());
+            rotation = OI.getINSTANCE().getPrimaryXboxLeftX();
+            speed *= SmartDashboard.getNumber("Controls/Drive Max Power", 1.0);
+            rotation *= SmartDashboard.getNumber("Controls/Turn Max Power", 1.0);
+        }
+
+        if (OI.getINSTANCE().getPrimaryXboxA()) speed *= SmartDashboard.getNumber("Controls/Slow Mode Percent", 0.2);
         rotation *= rotation_factor;
 
-        System.out.println("Drive() speed:");
-        System.out.println(speed);
-        System.out.println(rotation);
-
-        //DriveTrain.getInstance().arcadeDrive(0,0, false);
         DriveTrain.getInstance().arcadeDrive(speed, rotation, true);
     }
 

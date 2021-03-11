@@ -155,6 +155,10 @@ public class OI {
         return this.primaryXbox.getAButton();
     }
 
+    public boolean getSecondaryXboxY(){
+        return this.secondaryXbox.getYButton();
+    }
+
     public boolean getSecondaryXboxB(){
         return this.secondaryXbox.getAButton();
     }

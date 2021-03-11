@@ -20,6 +20,7 @@ public class TeleopHopper extends CommandBase {
     @Override
     public void execute() {
         if (OI.getINSTANCE().getXboxRightBumper()) Hopper.getInstance().spin(RobotConfig.MAGAZINE.HOPPER_DEFAULT_POWER);
+        else if (OI.getINSTANCE().getSecondaryXboxY()) Hopper.getInstance().spin(-RobotConfig.MAGAZINE.HOPPER_DEFAULT_POWER);
         else Hopper.getInstance().spin(0);
     }
 

@@ -34,6 +34,7 @@ public final class RobotConfig
     }
     public static class DRIVE {
         public static final double POWER_CURVE_EXPONENT = 2.8;
+        public static final String[] DRIVE_SCHEMES = { "Bork", "Emerson" };
     }
 
     public static class DRIVE_STRAIGHT {

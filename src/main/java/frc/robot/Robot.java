@@ -54,7 +54,7 @@ public class Robot extends TimedRobot {
 
         String[] SDDoubles = {"Shooter Max Power", "Angle", "Calibrate1", "Calibrate2",
                 "Encoder Distance", "Inches to Drive", "Rotation(degrees)", "target-x", "target-y", "Turret Pos", "Pos Degrees",
-                "Shooter RPM", "Shooter Power Current", "Drive Max Power", "Gain/FSP", "Hopper Power", "Magazine Power", "Shooter RPM Target",
+                "Shooter RPM", "Shooter Power Current", "Controls/Drive Max Power", "Controls/Turn Max Power", "Gain/FSP", "Hopper Power", "Magazine Power", "Shooter RPM Target",
                 "Preshooter Power", "Shooter Left Power", "Shooter Right Power", "Shooter Left RPM", "Shooter Right RPM"};
 
         for (String doubleName : SDDoubles) {
@@ -83,6 +83,9 @@ public class Robot extends TimedRobot {
                 SmartDashboard.setPersistent(booleanName);
             }
         }
+
+        SmartDashboard.setDefaultString("Controls/Drive Scheme", RobotConfig.DRIVE.DRIVE_SCHEMES[0]);
+        SmartDashboard.setDefaultStringArray("Controls/Drive Schemes", RobotConfig.DRIVE.DRIVE_SCHEMES);
 
         CommandScheduler.getInstance().run();
     }

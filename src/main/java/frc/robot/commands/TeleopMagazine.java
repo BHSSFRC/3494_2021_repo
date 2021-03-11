@@ -20,9 +20,11 @@ public class TeleopMagazine extends CommandBase {
 
     @Override
     public void execute() {
-        boolean runTop = OI.getINSTANCE().getXboxRightBumper() && !Robot.getLinebreakTop().lineBroken();
-        boolean runBottom = OI.getINSTANCE().getXboxRightBumper() && !(Robot.getLinebreakBottom().lineBroken() && Robot.getLinebreakTop().lineBroken());
-        Magazine.getInstance().run(runTop, false, runBottom, false);
+        boolean runTop = (OI.getINSTANCE().getXboxRightBumper() && !Robot.getLinebreakTop().lineBroken()) || OI.getINSTANCE().getSecondaryXboxY();
+        boolean runBottom = (OI.getINSTANCE().getXboxRightBumper() && !(Robot.getLinebreakBottom().lineBroken() && Robot.getLinebreakTop().lineBroken())) || OI.getINSTANCE().getSecondaryXboxY();
+        boolean reverse = OI.getINSTANCE().getSecondaryXboxY();
+        
+        Magazine.getInstance().run(runTop, reverse, runBottom, reverse);
     }
 
     @Override
