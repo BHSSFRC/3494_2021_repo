@@ -92,7 +92,7 @@ public class DriveTrain extends SubsystemBase {
         double[] stickSpeeds = normalize(new double[]{leftMotorOutput, rightMotorOutput});
         this.tankDrive(stickSpeeds[0], stickSpeeds[1]);
     }
-
+    
     private double[] normalize(double[] motorSpeeds) {
         double max = Math.abs(motorSpeeds[0]);
         boolean normFlag = max > 1;
@@ -151,7 +151,6 @@ public class DriveTrain extends SubsystemBase {
     public double getRightEncoderPosition(){
         return (this.rightMaster.getSelectedSensorPosition() + this.rightSlave.getSelectedSensorPosition()) / 2;
     }
-
     public double getEncoderPosition(){
         return (this.getLeftEncoderPosition() + this.getRightEncoderPosition()) / 2;
     }
