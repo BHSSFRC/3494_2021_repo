@@ -24,7 +24,15 @@ public class TeleopMagazine extends CommandBase {
         boolean runBottom = (OI.getINSTANCE().getXboxRightBumper() && !(Robot.getLinebreakBottom().lineBroken() && Robot.getLinebreakTop().lineBroken())) || OI.getINSTANCE().getSecondaryXboxY();
         boolean reverse = OI.getINSTANCE().getSecondaryXboxY();
         
-        Magazine.getInstance().run(runTop, reverse, runBottom, reverse);
+        double frontPower = runTop ? RobotConfig.MAGAZINE.FRONT_MOTOR_DEFAULT_POWER : 0;
+        double bottomPower = runBottom ? RobotConfig.MAGAZINE.BOTTOM_MOTOR_DEFAULT_POWER : 0;
+
+        if (reverse) {
+            frontPower = -frontPower;
+            bottomPower = -bottomPower;
+        }
+        
+        Magazine.getInstance().run(frontPower, bottomPower);
     }
 
     @Override

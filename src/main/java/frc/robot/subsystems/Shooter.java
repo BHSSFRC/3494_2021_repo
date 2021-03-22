@@ -41,6 +41,7 @@ public class Shooter extends SubsystemBase {
     {
         ONE(DoubleSolenoid.Value.kReverse, DoubleSolenoid.Value.kReverse), 
         TWO(DoubleSolenoid.Value.kForward, DoubleSolenoid.Value.kForward),
+        TWOPOINTFIVE(DoubleSolenoid.Value.kReverse, DoubleSolenoid.Value.kForward),
         THREE(DoubleSolenoid.Value.kForward, DoubleSolenoid.Value.kReverse);
 
         private final DoubleSolenoid.Value hood, limiter;
@@ -65,8 +66,11 @@ public class Shooter extends SubsystemBase {
             else if (this == Position.TWO) {
                 return Position.ONE;
             }
-            else if (this == Position.THREE) {
+            else if (this == Position.TWOPOINTFIVE) {
                 return Position.TWO;
+            }
+            else if (this == Position.THREE) {
+                return Position.TWOPOINTFIVE;
             }
             else
             {
@@ -80,6 +84,9 @@ public class Shooter extends SubsystemBase {
                 return Position.TWO;
             }
             else if (this == Position.TWO) {
+                return Position.TWOPOINTFIVE;
+            }
+            else if (this == Position.TWOPOINTFIVE) {
                 return Position.THREE;
             }
             else if (this == Position.THREE) {
@@ -90,9 +97,55 @@ public class Shooter extends SubsystemBase {
                 return Position.ONE;
             }
         }
+
+        public static Position fromNumber(double number) {
+            int intNumber = (int) (number * 10);
+            switch (intNumber) {
+                default: return ONE;
+                case 20: return TWO;
+                case 25: return TWOPOINTFIVE;
+                case 30: return THREE;
+            }
+        }
+
+        public double toNumber() {
+            switch (this) {
+                default: return 1;
+                case TWO: return 2;
+                case TWOPOINTFIVE: return 2.5;
+                case THREE: return 3;
+            }
+        }
     }
 
-    private Position currentPosition;
+    public static class Settings {
+        private double rpm;
+        private Position hoodPosition;
+
+        public Settings(double rpm, Position hoodPosition) {
+            this.rpm = rpm;
+            this.hoodPosition = hoodPosition;
+        }
+
+        public static Settings fromString(String setting) {
+            String[] parameters = setting.split(":");
+            return new Settings(Double.parseDouble(parameters[0]), Position.fromNumber(Double.parseDouble(parameters[1])));
+        }
+
+        public String toString() {
+            return rpm + ":" + hoodPosition.toNumber();
+        }
+
+        public double getRPM() {
+            return rpm;
+        }
+
+        public Position getPosition() {
+            return hoodPosition;
+        }
+    }
+
+    private Position currentPosition = Position.ONE;
 
     private Shooter() {
         this.left = new CANSparkMax(RobotMap.SHOOTER.LEFT, CANSparkMaxLowLevel.MotorType.kBrushless);
@@ -142,13 +195,13 @@ public class Shooter extends SubsystemBase {
         rightPID.setFF(kFF);
         rightPID.setOutputRange(kMinOutput, kMaxOutput);
 
-        SmartDashboard.putNumber("P Gain", kP);
-        SmartDashboard.putNumber("I Gain", kI);
-        SmartDashboard.putNumber("D Gain", kD);
-        SmartDashboard.putNumber("I Zone", kIz);
-        SmartDashboard.putNumber("Feed Forward", kFF);
-        SmartDashboard.putNumber("Max Output", kMaxOutput);
-        SmartDashboard.putNumber("Min Output", kMinOutput);
+        SmartDashboard.putNumber("Shooter/P Gain", kP);
+        SmartDashboard.putNumber("Shooter/I Gain", kI);
+        SmartDashboard.putNumber("Shooter/D Gain", kD);
+        SmartDashboard.putNumber("Shooter/I Zone", kIz);
+        SmartDashboard.putNumber("Shooter/Feed Forward", kFF);
+        SmartDashboard.putNumber("Shooter/Max Output", kMaxOutput);
+        SmartDashboard.putNumber("Shooter/Min Output", kMinOutput);
     }
 
     public void setLedRings(boolean on) {
@@ -205,16 +258,37 @@ public class Shooter extends SubsystemBase {
 
         //System.out.println("Current Pos: " + this.currentPosition + " Goal Pos: " + position);
         if (position != this.currentPosition) {
-            this.limiter.set(DoubleSolenoid.Value.kReverse);
-            this.hood.set(DoubleSolenoid.Value.kReverse);
+            switch (this.currentPosition) {
+                case TWO:
+                    this.limiter.set(DoubleSolenoid.Value.kReverse);
+                    this.hood.set(DoubleSolenoid.Value.kReverse);
+                    break;
+                case TWOPOINTFIVE:
+                    this.hood.set(DoubleSolenoid.Value.kForward);
+                    Timer.delay(0.075);
+                    this.limiter.set(DoubleSolenoid.Value.kReverse);
+                    this.hood.set(DoubleSolenoid.Value.kReverse);
+                    break;
+                case THREE:
+                    this.limiter.set(DoubleSolenoid.Value.kReverse);
+                    this.hood.set(DoubleSolenoid.Value.kReverse);
+                    break;
+            }
+
             Timer.delay(0.5);
 
             switch(position){
                 case TWO:
                     this.hood.set(DoubleSolenoid.Value.kForward);
-                    //Timer.delay(0.5);
                     Timer.delay(0.075);
                     this.limiter.set(DoubleSolenoid.Value.kForward);
+                    break;
+                case TWOPOINTFIVE:
+                    this.hood.set(DoubleSolenoid.Value.kForward);
+                    Timer.delay(0.075);
+                    this.limiter.set(DoubleSolenoid.Value.kForward);
+                    Timer.delay(0.075);
+                    this.hood.set(DoubleSolenoid.Value.kReverse);
                     break;
                 case THREE:
                     this.hood.set(DoubleSolenoid.Value.kForward);
@@ -226,13 +300,13 @@ public class Shooter extends SubsystemBase {
     }
 
     public void updateMotorPID(){
-        double p = SmartDashboard.getNumber("P Gain", 0);
-        double i = SmartDashboard.getNumber("I Gain", 0);
-        double d = SmartDashboard.getNumber("D Gain", 0);
-        double iz = SmartDashboard.getNumber("I Zone", 0);
-        double ff = SmartDashboard.getNumber("Feed Forward", 0);
-        double max = SmartDashboard.getNumber("Max Output", 0);
-        double min = SmartDashboard.getNumber("Min Output", 0);
+        double p = SmartDashboard.getNumber("Shooter/P Gain", 0);
+        double i = SmartDashboard.getNumber("Shooter/I Gain", 0);
+        double d = SmartDashboard.getNumber("Shooter/D Gain", 0);
+        double iz = SmartDashboard.getNumber("Shooter/I Zone", 0);
+        double ff = SmartDashboard.getNumber("Shooter/Feed Forward", 0);
+        double max = SmartDashboard.getNumber("Shooter/Max Output", 0);
+        double min = SmartDashboard.getNumber("Shooter/Min Output", 0);
 
         // if PID coefficients on SmartDashboard have changed, write new values to controller
         if((p != kP)) { leftPID.setP(p); kP = p; rightPID.setP(p);}

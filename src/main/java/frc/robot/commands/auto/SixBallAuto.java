@@ -18,7 +18,7 @@ public class SixBallAuto extends SequentialCommandGroup {
     public SixBallAuto() {
         super(
                 new InstantCommand(() -> Intake.getInstance().setDeployed(true)),
-                new AimAndShoot(3),
+                new AimAndShoot(),
                 new ParallelDeadlineGroup(
                         new DistanceDrive(-80),
                         new RunIntakeAuto()
@@ -26,8 +26,8 @@ public class SixBallAuto extends SequentialCommandGroup {
                 new RunIntakeAuto().withTimeout(0.5),
                 new ParallelDeadlineGroup(
                         new DistanceDrive(80),
-                        new Shoot(SmartDashboard.getNumber("Shooter RPM Target", 0), true)),
-                new AimAndShoot(3)
+                        new Shoot(SmartDashboard.getNumber("Shooter/Shooter RPM Target", 0))),
+                new AimAndShoot()
         );
     }
 }

@@ -29,7 +29,7 @@ public class SpinToPosition extends CommandBase {
 
     @Override
     public void initialize() {
-        SmartDashboard.putBoolean("Go To Setpoint?", true);
+        SmartDashboard.putBoolean("Turret/Go To Setpoint?", true);
         Turret.getInstance().setsetpoint(this.setpoint);
     }
 
@@ -50,6 +50,6 @@ public class SpinToPosition extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        SmartDashboard.putBoolean("Go To Setpoint?", false);
+        SmartDashboard.putBoolean("Turret/Go To Setpoint?", false);
     }
 }

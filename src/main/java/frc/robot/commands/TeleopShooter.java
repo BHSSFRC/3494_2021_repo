@@ -8,24 +8,16 @@ import frc.robot.subsystems.PreShooter;
 import frc.robot.subsystems.Shooter;
 import frc.robot.util.QuadTimer;
 
-public class Shoot extends CommandBase {
+public class TeleopShooter extends CommandBase {
     private double targetRPM;
     private QuadTimer timer;
+    private Shooter.Position shooterPosition = Shooter.Position.ONE;
 
     //Run shooter at the RPM specified by the Smart Dashboard
-    public Shoot() {
-        this(0);
-    }
-
-    /**
-     * Run shooter at a constant RPM
-     * @param targetRPM - the target RPM
-     * @param RPM - can be either true or false, the variable only exists to allow a second constructor with another double input
-     */
-    public Shoot(double targetRPM){
+    public TeleopShooter() {
         addRequirements(Shooter.getInstance(), PreShooter.getInstance());
-        this.targetRPM = targetRPM;
         this.timer = new QuadTimer();
+        this.targetRPM = SmartDashboard.getNumber("Shooter/Shooter RPM Target", 1);
     }
 
     @Override
@@ -40,7 +32,19 @@ public class Shoot extends CommandBase {
         //shootPower = OI.getINSTANCE().getXboxLeftTrigger() * SmartDashboard.getNumber("Shooter/Shooter Max Power", 1);
         //Shooter.getInstance().shoot(shootPower);
         double currentRPM = Shooter.getInstance().getLeftRPM();
+        targetRPM = OI.getINSTANCE().getXboxLeftTrigger() * SmartDashboard.getNumber("Shooter/Shooter RPM Target", 1);
         Shooter.getInstance().setRPM(targetRPM);
+
+        if (OI.getINSTANCE().getXboxDpadDown()) shooterPosition = Shooter.Position.ONE;
+        else if (OI.getINSTANCE().getXboxDpadLeft()) shooterPosition = Shooter.Position.TWO;
+        else if (OI.getINSTANCE().getXboxDpadRight()) shooterPosition = Shooter.Position.TWOPOINTFIVE;
+        else if (OI.getINSTANCE().getXboxDpadUp()) shooterPosition = Shooter.Position.THREE;
+
+        if (targetRPM > 0) {
+            Shooter.getInstance().setPosition(shooterPosition);
+        } else {
+            Shooter.getInstance().setPosition(Shooter.Position.ONE);
+        }
 
         //}
 

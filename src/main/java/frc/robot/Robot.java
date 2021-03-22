@@ -47,15 +47,19 @@ public class Robot extends TimedRobot {
         this.table = NetworkTableInstance.getDefault().getTable("OpenSight");
 
         //remove all SmartDashboard elements from the Driver Station
-        /**String[] smartDashKeys = SmartDashboard.getKeys().toArray(new String[0]);
+        /*String[] smartDashKeys = SmartDashboard.getKeys().toArray(new String[0]);
         for (String key : smartDashKeys){
             SmartDashboard.delete(key);
         }*/
 
-        String[] SDDoubles = {"Shooter Max Power", "Angle", "Calibrate1", "Calibrate2",
-                "Encoder Distance", "Inches to Drive", "Rotation(degrees)", "target-x", "target-y", "Turret Pos", "Pos Degrees",
-                "Shooter RPM", "Shooter Power Current", "Controls/Drive Max Power", "Controls/Turn Max Power", "Gain/FSP", "Hopper Power", "Magazine Power", "Shooter RPM Target",
-                "Preshooter Power", "Shooter Left Power", "Shooter Right Power", "Shooter Left RPM", "Shooter Right RPM"};
+        String[] SDDoubles = {
+            "Calibrate1", "Calibrate2", "Gain/FSP",
+            "Shooter/Shooter Max Power", "Shooter/Shooter RPM", "Shooter/Shooter Power Current", "Shooter/Shooter RPM Target", "Shooter/Shooter Left Power", "Shooter/Shooter Right Power", "Shooter/Shooter Left RPM", "Shooter/Shooter Right RPM", "Shooter/P Gain", "Shooter/I Gain", "Shooter/D Gain", "Shooter/I Zone", "Shooter/Feed Forward", "Shooter/Max Output", "Shooter/Min Output",
+            "DriveTrain/Angle", "DriveTrain/Encoder Distance", "DriveTrain/Inches to Drive", "DriveTrain/DriveStraight Offset", "DriveTrain/DriveStraight Offset", "DriveTrain/PID P", "DriveTrain/PID I", "DriveTrain/PID D",
+            "Turret/Rotation(degrees)", "Turret/target-x", "Turret/target-y", "Turret/Target Area", "Turret/Turret Pos", "Turret/Pos Degrees",
+            "Controls/Drive Max Power", "Controls/Turn Max Power",
+            "Magazine/Hopper Power", "Magazine/Front Magazine Power", "Magazine/Bottom Magazine Power", "Magazine/Preshooter Power"
+        };
 
         for (String doubleName : SDDoubles) {
             if (!SmartDashboard.containsKey(doubleName)) {
@@ -63,7 +67,44 @@ public class Robot extends TimedRobot {
                 SmartDashboard.setPersistent(doubleName);
             }
         }
-        CommandScheduler.getInstance().setDefaultCommand(Shooter.getInstance(), new Shoot());
+
+        String[] SDBooleans = {
+            "Turret/Front Limit", "Turret/Back Limit", "Turret/Go To Setpoint?",
+            "DriveTrain/Auto Forward?", 
+            "Shooter/Enable AimBot", 
+            "Magazine/Linebreak Bottom", "Magazine/Linebreak Top", "Magazine/Intaking Routine"
+        };
+
+        for (String booleanName : SDBooleans) {
+            if (!SmartDashboard.containsKey(booleanName)) {
+                SmartDashboard.putBoolean(booleanName, false);
+                SmartDashboard.setPersistent(booleanName);
+            }
+        }
+
+        String[] SDStrins = {
+            "Turret/Spin",
+            "Controls/Drive Scheme"
+        };
+
+        for (String stringName : SDStrins) {
+            if (!SmartDashboard.containsKey(stringName)) {
+                SmartDashboard.putString(stringName, "");
+                SmartDashboard.setPersistent(stringName);
+            }
+        }
+        
+        if (!SmartDashboard.containsKey("Controls/Drive Schemes")) {
+            SmartDashboard.setDefaultStringArray("Controls/Drive Schemes", RobotConfig.DRIVE.DRIVE_SCHEMES);
+            SmartDashboard.setPersistent("Controls/Drive Schemes");
+        }
+
+        if (!SmartDashboard.containsKey("Shooter/Shooter Presets")) {
+            SmartDashboard.setDefaultStringArray("Shooter/Shooter Presets", RobotConfig.SHOOTER.PRESETS);
+            SmartDashboard.setPersistent("Shooter/Shooter Presets");
+        }
+
+        CommandScheduler.getInstance().setDefaultCommand(Shooter.getInstance(), new TeleopShooter());
         CommandScheduler.getInstance().setDefaultCommand(Intake.getInstance(), new RunIntake());
         CommandScheduler.getInstance().setDefaultCommand(Turret.getInstance(), new SpinTurret());
         CommandScheduler.getInstance().setDefaultCommand(DriveTrain.getInstance(), new Drive());
@@ -74,18 +115,6 @@ public class Robot extends TimedRobot {
         //CommandScheduler.getInstance().setDefaultCommand(Magazine.getInstance(), new RunMagazine());
 
         CommandScheduler.getInstance().schedule(new InstantCommand(Pneumatics.getInstance()::startCompressor));
-
-        String[] SDBooleans = {"Front Limit", "Back Limit", "Auto Forward?", "LBottom", "LTop", "Enable AimBot"};
-
-        for (String booleanName : SDBooleans) {
-            if (!SmartDashboard.containsKey(booleanName)) {
-                SmartDashboard.putBoolean(booleanName, false);
-                SmartDashboard.setPersistent(booleanName);
-            }
-        }
-
-        SmartDashboard.setDefaultString("Controls/Drive Scheme", RobotConfig.DRIVE.DRIVE_SCHEMES[0]);
-        SmartDashboard.setDefaultStringArray("Controls/Drive Schemes", RobotConfig.DRIVE.DRIVE_SCHEMES);
 
         CommandScheduler.getInstance().run();
     }
@@ -136,26 +165,26 @@ public class Robot extends TimedRobot {
         boolean showSmartDashInfo = true;
         boolean showShooterPowerInfo = true;
         if (showSmartDashInfo){
-            SmartDashboard.putNumber("Encoder Distance", DriveTrain.getInstance().getEncoderPosition());
-            SmartDashboard.putNumber("Shooter RPM", Shooter.getInstance().getRPM());
-            SmartDashboard.putNumber("Turret Pos", Turret.getInstance().getPosition());
-            SmartDashboard.putNumber("Pos Degrees", Turret.getInstance().getDegreesPosition());
-            SmartDashboard.putBoolean("Front Limit", Turret.getInstance().atFrontLimit());
-            SmartDashboard.putBoolean("Back Limit", Turret.getInstance().atBackLimit());
+            SmartDashboard.putNumber("DriveTrain/Encoder Distance", DriveTrain.getInstance().getEncoderPosition());
+            SmartDashboard.putNumber("Shooter/Shooter RPM", Shooter.getInstance().getRPM());
+            SmartDashboard.putNumber("Turret/Turret Pos", Turret.getInstance().getPosition());
+            SmartDashboard.putNumber("Turret/Pos Degrees", Turret.getInstance().getDegreesPosition());
+            SmartDashboard.putBoolean("Turret/Front Limit", Turret.getInstance().atFrontLimit());
+            SmartDashboard.putBoolean("Turret/Back Limit", Turret.getInstance().atBackLimit());
 
-            SmartDashboard.putBoolean("LBottom", getLinebreakBottom().lineBroken());
-            SmartDashboard.putBoolean("LTop", getLinebreakTop().lineBroken());
+            SmartDashboard.putBoolean("Magazine/Linebreak Bottom", getLinebreakBottom().lineBroken());
+            SmartDashboard.putBoolean("Magazine/Linebreak Top", getLinebreakTop().lineBroken());
 
-            SmartDashboard.putNumber("target-x", this.table.getEntry("target-x").getDouble(666));
-            SmartDashboard.putNumber("target-y", this.table.getEntry("target-y").getDouble(666));
-            SmartDashboard.putNumber("Target Area", this.table.getEntry("area").getDouble(0));
+            SmartDashboard.putNumber("Turret/target-x", this.table.getEntry("target-x").getDouble(666));
+            SmartDashboard.putNumber("Turret/target-y", this.table.getEntry("target-y").getDouble(666));
+            SmartDashboard.putNumber("Turret/Target Area", this.table.getEntry("area").getDouble(0));
             Shooter.getInstance().updateMotorPID();
 
             if(showShooterPowerInfo){
-                SmartDashboard.putNumber("Shooter Left Power", Shooter.getInstance().getLeftPower());
-                SmartDashboard.putNumber("Shooter Right Power", Shooter.getInstance().getRightPower());
-                SmartDashboard.putNumber("Shooter Left RPM", Shooter.getInstance().getLeftRPM());
-                SmartDashboard.putNumber("Shooter Right RPM", Shooter.getInstance().getRightRPM());
+                SmartDashboard.putNumber("Shooter/Shooter Left Power", Shooter.getInstance().getLeftPower());
+                SmartDashboard.putNumber("Shooter/Shooter Right Power", Shooter.getInstance().getRightPower());
+                SmartDashboard.putNumber("Shooter/Shooter Left RPM", Shooter.getInstance().getLeftRPM());
+                SmartDashboard.putNumber("Shooter/Shooter Right RPM", Shooter.getInstance().getRightRPM());
             }
         }
     }

@@ -20,16 +20,16 @@ public class Drive extends CommandBase {
 
     @Override
     public void execute() {
-        double rotation_factor = 0.8;
 
         String driveScheme = SmartDashboard.getString("Controls/Drive Scheme", RobotConfig.DRIVE.DRIVE_SCHEMES[0]);
 
         if (driveScheme.equals(RobotConfig.DRIVE.DRIVE_SCHEMES[0])) {
             double speed = OI.getINSTANCE().getPrimaryXboxLeftY();
             double rotation = OI.getINSTANCE().getPrimaryXboxLeftX();
+            speed *= SmartDashboard.getNumber("Controls/Drive Max Power", 1.0);
+            rotation *= SmartDashboard.getNumber("Controls/Turn Max Power", 1.0);
 
             if (OI.getINSTANCE().getPrimaryXboxA()) speed *= SmartDashboard.getNumber("Controls/Slow Mode Percent", 0.2);
-            rotation *= rotation_factor;
 
             DriveTrain.getInstance().arcadeDrive(speed, rotation, true);
         } else if (driveScheme.equals(RobotConfig.DRIVE.DRIVE_SCHEMES[1])) {
@@ -39,7 +39,6 @@ public class Drive extends CommandBase {
             rotation *= SmartDashboard.getNumber("Controls/Turn Max Power", 1.0);
 
             if (OI.getINSTANCE().getPrimaryXboxA()) speed *= SmartDashboard.getNumber("Controls/Slow Mode Percent", 0.2);
-            rotation *= rotation_factor;
 
             DriveTrain.getInstance().arcadeDrive(speed, rotation, true);
         } else if (driveScheme.equals(RobotConfig.DRIVE.DRIVE_SCHEMES[2])) {
@@ -61,7 +60,6 @@ public class Drive extends CommandBase {
             rotation *= SmartDashboard.getNumber("Controls/Turn Max Power", 1.0);
 
             if (OI.getINSTANCE().getPrimaryXboxA()) speed *= SmartDashboard.getNumber("Controls/Slow Mode Percent", 0.2);
-            rotation *= rotation_factor;
 
             DriveTrain.getInstance().arcadeDrive(speed, rotation, true);
         }

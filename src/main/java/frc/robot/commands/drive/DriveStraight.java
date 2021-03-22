@@ -46,9 +46,9 @@ public class DriveStraight extends CommandBase {
         double kd;
         //if (SmartDashboard.containsKey("Display Drivetrain data?")) {
         if(true){
-            kp = SmartDashboard.getNumber("Tuning/PID P", 0.9);
-            ki = SmartDashboard.getNumber("Tuning/PID I", 0.0);
-            kd = SmartDashboard.getNumber("Tuning/PID D", 0.0);
+            kp = SmartDashboard.getNumber("DriveTrain/PID P", 0.9);
+            ki = SmartDashboard.getNumber("DriveTrain/PID I", 0.0);
+            kd = SmartDashboard.getNumber("DriveTrain/PID D", 0.0);
         }else{
             kp = RobotConfig.DRIVE_STRAIGHT.kP;
             ki = RobotConfig.DRIVE_STRAIGHT.kI;
@@ -79,7 +79,7 @@ public class DriveStraight extends CommandBase {
         //double output = this.pidController.calculate(input, this.timer.delta());
         double output = (input - this.initialYaw) * RobotConfig.DRIVE_STRAIGHT.kP_DUMB;
         //double output = this.pidController.calculate(this.initialYaw, this.timer.delta());
-        //SmartDashboard.putNumber("DriveStraight Offset", output);
+        //SmartDashboard.putNumber("DriveTrain/DriveStraight Offset", output);
         DriveTrain.getInstance().tankDrive(power - output, power + output);
     }
 

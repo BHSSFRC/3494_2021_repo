@@ -78,23 +78,23 @@ public class Turret extends PIDSubsystem {
     }
 
     public void spin(double power){
-        //SmartDashboard.putString("Spin", "spinning...");
-        //SmartDashboard.putString("Spin", "SpinTurret, power = " + power);
+        //SmartDashboard.putString("Turret/Spin", "spinning...");
+        SmartDashboard.putString("Turret/Spin", "SpinTurret, power = " + power);
         if(this.getPosition() > this.backSoftLimit){
             power = Math.max(-.2, power);
-            //SmartDashboard.putString("Spin", "BSL: " + this.getBackSoftLimit());
+            SmartDashboard.putString("Turret/Spin", "BSL: " + this.getBackSoftLimit());
         }
         if(this.getPosition() < this.getFrontSoftLimit()){
             power = Math.min(0.2, power);
-            //SmartDashboard.putString("Spin", ("FSL: " + this.getFrontSoftLimit() + " FHL: " + this.frontHardLimit));
+            SmartDashboard.putString("Turret/Spin", ("FSL: " + this.getFrontSoftLimit() + " FHL: " + this.frontHardLimit));
         }
         if(this.atBackLimit()){
             power = Math.min(0, power);
-            //SmartDashboard.putString("Spin", "back limit " + this.getBackSoftLimit());
+            SmartDashboard.putString("Turret/Spin", "back limit " + this.getBackSoftLimit());
         }
         if(this.atFrontLimit()){
             power = Math.max(0, power);
-            //SmartDashboard.putString("Spin", "front limit " + this.getFrontSoftLimit());
+            SmartDashboard.putString("Turret/Spin", "front limit " + this.getFrontSoftLimit());
         }
         if(Math.abs(power) < 0.02){
             power = 0;
@@ -181,10 +181,10 @@ public class Turret extends PIDSubsystem {
     }
 
     public boolean atCameraSetpoint(){
-        if(!SmartDashboard.getBoolean("Enable AimBot", false)){
+        if(!SmartDashboard.getBoolean("Shooter/Enable AimBot", false)){
             return true;
         }
-        return Math.abs(SmartDashboard.getNumber("target-x", -1)) < .02;
+        return Math.abs(SmartDashboard.getNumber("Turret/target-x", -1)) < .02;
     }
 
     public double getOffset(){

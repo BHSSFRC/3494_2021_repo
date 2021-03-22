@@ -8,8 +8,18 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 //spin hopper at constant speed
 public class RunHopper extends CommandBase {
+    boolean run;
+    boolean reverse;
+
     public RunHopper() {
+        this(false, false);
+    }
+
+    public RunHopper(boolean run, boolean reverse) {
         addRequirements(Hopper.getInstance());
+
+        this.run = run;
+        this.reverse = reverse;
     }
 
     @Override
@@ -19,7 +29,11 @@ public class RunHopper extends CommandBase {
 
     @Override
     public void execute() {
-        Hopper.getInstance().spin(RobotConfig.MAGAZINE.HOPPER_DEFAULT_POWER);
+        double power = this.run ? RobotConfig.MAGAZINE.HOPPER_DEFAULT_POWER : 0;
+        
+        if (this.reverse) power = -power;
+
+        Hopper.getInstance().spin(power);
     }
 
     @Override

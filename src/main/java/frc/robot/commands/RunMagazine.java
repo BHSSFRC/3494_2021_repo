@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.RobotConfig;
 import frc.robot.subsystems.Magazine;
 
 public class RunMagazine extends CommandBase {
@@ -12,6 +13,15 @@ public class RunMagazine extends CommandBase {
     public RunMagazine() {
         this(false, false, false, false);
     }
+    
+    /**
+     * run front and bottom motors in magazine at zero or constant speeds
+     * @param front - whether the front motor spins or is at rest
+     * @param bottom - whether the bottom motor spins or is at rest
+     */
+    public RunMagazine(boolean front, boolean bottom){
+        this(front, false, bottom, false);
+    }
 
     /**
      * run front and bottom motors in magazine at zero or constant speeds
@@ -22,6 +32,7 @@ public class RunMagazine extends CommandBase {
      */
     public RunMagazine(boolean front, boolean frontReverse, boolean bottom, boolean bottomReverse){
         addRequirements(Magazine.getInstance());
+
         this.runFront = front;
         this.runBottom = bottom;
         this.frontReverse = frontReverse;
@@ -30,12 +41,19 @@ public class RunMagazine extends CommandBase {
 
     @Override
     public void initialize() {
+        Magazine.getInstance().stop();
     }
 
     @Override
     public void execute() {
-        Magazine.getInstance().runFront(this.runFront, this.frontReverse);
-        Magazine.getInstance().runBottom(this.runBottom, this.bottomReverse);
+        double front = this.runFront ? RobotConfig.MAGAZINE.FRONT_MOTOR_DEFAULT_POWER : 0;
+        double bottom = this.runBottom ? RobotConfig.MAGAZINE.BOTTOM_MOTOR_DEFAULT_POWER : 0;
+        
+        if (this.frontReverse) front = -front;
+        if (this.bottomReverse) bottom = -bottom;
+
+        Magazine.getInstance().runFront(front);
+        Magazine.getInstance().runBottom(bottom);
     }
 
     @Override
