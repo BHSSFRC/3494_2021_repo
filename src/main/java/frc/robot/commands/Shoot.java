@@ -14,6 +14,7 @@ public class Shoot extends CommandBase {
     private double shootPower;
     private boolean fixedSpeed;
     private boolean goToRPM;
+    private Shooter.Position shooterPosition = Shooter.Position.ONE;
 
     //Run shooter at the RPM specified by the Smart Dashboard
     public Shoot() {
@@ -60,21 +61,27 @@ public class Shoot extends CommandBase {
     @Override
     public void execute() {
         //Run shooter at either specified power or RPM
-        if(!this.fixedSpeed){
-            if(SmartDashboard.getNumber("Shooter Max Power", .8) != -1){
-                shootPower = OI.getINSTANCE().getXboxLeftTrigger() *
-                        SmartDashboard.getNumber("Shooter Max Power", 1);
-            }else{
-                shootPower = OI.getINSTANCE().getXboxLeftTrigger() *
-                        RobotConfig.SHOOTER.SHOOTER_MAX_POWER;
-            }
+        //if (!this.fixedSpeed) {
+        shootPower = OI.getINSTANCE().getXboxLeftTrigger() * SmartDashboard.getNumber("Shooter Max Power", 1);
+        Shooter.getInstance().shoot(shootPower);
+
+        if (OI.getINSTANCE().getXboxDpadDown()) shooterPosition = Shooter.Position.ONE;
+        else if (OI.getINSTANCE().getXboxDpadLeft()) shooterPosition = Shooter.Position.TWO;
+        else if (OI.getINSTANCE().getXboxDpadUp()) shooterPosition = Shooter.Position.THREE;
+
+        if (shootPower > 0) {
+            Shooter.getInstance().setPosition(shooterPosition);
+        } else {
+            Shooter.getInstance().setPosition(Shooter.Position.ONE);
         }
 
-        if(this.goToRPM || (shootPower > 0.05 && targetRPM != -1)){
+        //}
+
+        /*if(this.goToRPM || (shootPower > 0.05 && targetRPM != -1)){
             Shooter.getInstance().setRPM(targetRPM);
         }else{
             Shooter.getInstance().shoot(shootPower);
-        }
+        }*/
 
         /**Preshooter only runs if the shooter is active and has been active for a fixed amount of time(and so is running at full power)
          * this is to avoid having the preshooter send balls into the shooter when the shooter isn't yet at full power

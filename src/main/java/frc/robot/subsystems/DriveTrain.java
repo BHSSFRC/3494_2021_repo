@@ -186,16 +186,6 @@ public class DriveTrain extends SubsystemBase {
         return value;
     }
 
-    /**public boolean aboveMaxTemp(){
-        if (this.rightMaster.getTemperature() > RobotMap.DRIVETRAIN.MAX_TEMP) {
-            return true;
-        } else if (this.rightSlave.getTemperature() > RobotMap.DRIVETRAIN.MAX_TEMP || this.leftMaster.getTemperature() > RobotMap.DRIVETRAIN.MAX_TEMP || this.leftSlave.getTemperature() > RobotMap.DRIVETRAIN.MAX_TEMP) {
-            return true;
-        } else {
-            return false;
-        }
-    }*/
-
     public double getLeftEncoderPosition(){
         return (this.leftMaster.getSelectedSensorPosition() + this.leftSlave.getSelectedSensorPosition()) / 2;
     }
@@ -205,7 +195,7 @@ public class DriveTrain extends SubsystemBase {
     }
 
     public double getLeftEncoderPositionMeters(){
-        return (this.leftMaster.getSelectedSensorPosition() + this.leftSlave.getSelectedSensorPosition()) / 2;
+        return (this.leftMaster.getSelectedSensorPosition() + this.leftSlave.getSelectedSensorPosition()) / 2 * RobotConfig.DRIVE_STRAIGHT.ENCODER_TICKS_PER_INCH * Constants.DriveConstants.INCHES_TO_METERS;
     }
 
     public double getRightEncoderPositionMeters(){
@@ -213,7 +203,7 @@ public class DriveTrain extends SubsystemBase {
     }
 
     public double getEncoderPosition(){
-        return (this.getLeftEncoderPosition() + this.getRightEncoderPosition()) / 2 * RobotConfig.DRIVE_STRAIGHT.ENCODER_TICKS_PER_INCH * Constants.DriveConstants.INCHES_TO_METERS;
+        return (this.getLeftEncoderPosition() + this.getRightEncoderPosition());
     }
 
     public void stop(){

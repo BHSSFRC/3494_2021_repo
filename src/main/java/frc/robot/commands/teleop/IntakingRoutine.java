@@ -23,17 +23,18 @@ public class IntakingRoutine extends SequentialCommandGroup {
         addCommands(
                 new ParallelDeadlineGroup(
                         new SequentialCommandGroup(
-                                new RunMagazine(true, false).withInterrupt(() -> Robot.getLinebreakBottom().lineBroken()),
+                                new RunMagazine(true, false, true, false).withInterrupt(() -> Robot.getLinebreakBottom().lineBroken()),
                                 new InstantCommand(() -> System.out.println("First Linebreak Sensor Tripped")),
-                                new RunMagazine(true, true).withInterrupt(() -> Robot.getLinebreakTop().lineBroken()),
-                                new InstantCommand(() -> System.out.println("Second Linebreak Sensor Tripped, wait " + RobotConfig.MAGAZINE.TIME_AFTER_2ND_LINEBREAK_SENSOR + " second(s)")),
-                                new RunMagazine(true, true).withTimeout(RobotConfig.MAGAZINE.TIME_AFTER_2ND_LINEBREAK_SENSOR),
-                                new InstantCommand(() -> System.out.println("(" + RobotConfig.MAGAZINE.TIME_AFTER_2ND_LINEBREAK_SENSOR + ") second passed")),
-                                new RunMagazine(true, false).withInterrupt(() -> Robot.getLinebreakBottom().lineBroken()),
-                                new InstantCommand(() -> System.out.println("First Linebreak Sensor Tripped, Finish"))
+                                new RunMagazine(true, false, true, false).withInterrupt(() -> Robot.getLinebreakTop().lineBroken()),
+                                new InstantCommand(() -> System.out.println("Second Linebreak Sensor Tripped")),
+                                new RunMagazine(true, false, false, false).withInterrupt(() -> Robot.getLinebreakBottom().lineBroken()),
+                                new InstantCommand(() -> System.out.println("First Linebreak Sensor Tripped")),
+                                new RunMagazine(true, true, true, true).withTimeout(RobotConfig.MAGAZINE.TIME_FOR_REVERSE),
+                                new InstantCommand(() -> System.out.println(RobotConfig.MAGAZINE.TIME_FOR_REVERSE + " passed, Finish.")),
+                                new RunMagazine(false, false, false, false).withTimeout(0.1)
                         ),
                         new RunHopper()
-                ),
+                ).withTimeout(10),
                 new InstantCommand(() -> Hopper.getInstance().stop()),
                 new InstantCommand(() -> Magazine.getInstance().stop()),
                 new InstantCommand(() -> System.out.println("Intaking Routine Finished"))

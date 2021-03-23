@@ -55,22 +55,26 @@ public class RobotMap {
         public static int SECONDARY_XBOX = 3;
         public static int BUTTON_BOARD = 4;
 
-        //xbox bindings
-        public static int RUN_SHOOTER = 6;
-        public static int SPIN_HOPPER_MAGAZINE = 5;
+        //secondary xbox bindings
+        public static int RUN_SHOOTER = 11;//Left Trigger
+        public static int SPIN_HOPPER_MAGAZINE = 6;
         public static int DISTANCE_DRIVE = 2;
+        public static int INTAKING_ROUTINE = 1;
 
         //button board bindings
         public static int FLOOR_PICKUP = 8;
-        public static int INTAKING_ROUTINE = 7;
+        
 
-        public static int EJECT_BALLS = 11;
+        public static int EJECT_BALLS = 5;
 
+
+        //Remove Climber from OI
+        /**
         public static int RELEASE_CLIMBER = 12;
         public static int DRIVE_CLIMBER = 14;
         public static int REVERSE_CLIMBER = 13;
         public static int REVERSE_CLIMBER_SLOW = 5;
-        public static int SAFETY_CLIMBER  = 9;
+        public static int SAFETY_CLIMBER  = 9;*/
 
         //public static int QUICK_TURRET_LIMITS = 2;
         public static int ENABLE_AIM_BOT = 2;

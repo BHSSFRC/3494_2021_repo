@@ -6,9 +6,9 @@ import frc.robot.OI;
 import frc.robot.subsystems.Hopper;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-//spin hopper at constant speed
-public class RunHopper extends CommandBase {
-    public RunHopper() {
+//spin hopper on xbox input
+public class TeleopHopper extends CommandBase {
+    public TeleopHopper() {
         addRequirements(Hopper.getInstance());
     }
 
@@ -19,7 +19,9 @@ public class RunHopper extends CommandBase {
 
     @Override
     public void execute() {
-        Hopper.getInstance().spin(RobotConfig.MAGAZINE.HOPPER_DEFAULT_POWER);
+        if (OI.getINSTANCE().getXboxRightBumper()) Hopper.getInstance().spin(RobotConfig.MAGAZINE.HOPPER_DEFAULT_POWER);
+        else if (OI.getINSTANCE().getSecondaryXboxY()) Hopper.getInstance().spin(-RobotConfig.MAGAZINE.HOPPER_DEFAULT_POWER);
+        else Hopper.getInstance().spin(0);
     }
 
     @Override

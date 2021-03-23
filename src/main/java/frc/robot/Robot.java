@@ -14,9 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.commands.RunIntake;
-import frc.robot.commands.RunMagazine;
-import frc.robot.commands.Shoot;
+import frc.robot.commands.*;
 import frc.robot.commands.drive.Drive;
 import frc.robot.commands.turret.SpinTurret;
 import frc.robot.sensors.Linebreaker;
@@ -56,7 +54,7 @@ public class Robot extends TimedRobot {
 
         String[] SDDoubles = {"Shooter Max Power", "Angle", "Calibrate1", "Calibrate2",
                 "Encoder Distance", "Inches to Drive", "Rotation(degrees)", "target-x", "target-y", "Turret Pos", "Pos Degrees",
-                "Shooter RPM", "Shooter Power Current", "Drive Max Power", "Gain/FSP", "Hopper Power", "Magazine Power", "Shooter RPM Target",
+                "Shooter RPM", "Shooter Power Current", "Controls/Drive Max Power", "Controls/Turn Max Power", "Gain/FSP", "Hopper Power", "Magazine Power", "Shooter RPM Target",
                 "Preshooter Power", "Shooter Left Power", "Shooter Right Power", "Shooter Left RPM", "Shooter Right RPM"};
 
         for (String doubleName : SDDoubles) {
@@ -69,8 +67,10 @@ public class Robot extends TimedRobot {
         CommandScheduler.getInstance().setDefaultCommand(Intake.getInstance(), new RunIntake());
         CommandScheduler.getInstance().setDefaultCommand(Turret.getInstance(), new SpinTurret());
         CommandScheduler.getInstance().setDefaultCommand(robotContainer.getDrivetrainInstance(), new Drive(robotContainer.getDrivetrainInstance()));
+        CommandScheduler.getInstance().setDefaultCommand(Hopper.getInstance(), new TeleopHopper());
+        CommandScheduler.getInstance().setDefaultCommand(Magazine.getInstance(), new TeleopMagazine());
 
-        CommandScheduler.getInstance().setDefaultCommand(Magazine.getInstance(), new RunMagazine());
+        //CommandScheduler.getInstance().setDefaultCommand(Magazine.getInstance(), new RunMagazine());
 
         CommandScheduler.getInstance().schedule(new InstantCommand(Pneumatics.getInstance()::startCompressor));
 
@@ -82,6 +82,9 @@ public class Robot extends TimedRobot {
                 SmartDashboard.setPersistent(booleanName);
             }
         }
+
+        SmartDashboard.setDefaultString("Controls/Drive Scheme", RobotConfig.DRIVE.DRIVE_SCHEMES[0]);
+        SmartDashboard.setDefaultStringArray("Controls/Drive Schemes", RobotConfig.DRIVE.DRIVE_SCHEMES);
 
         CommandScheduler.getInstance().run();
     }
