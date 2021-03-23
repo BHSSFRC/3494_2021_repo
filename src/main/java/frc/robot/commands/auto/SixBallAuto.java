@@ -9,23 +9,24 @@ import frc.robot.commands.Shoot;
 import frc.robot.commands.drive.DistanceDrive;
 import frc.robot.commands.teleop.AimAndShoot;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.DriveTrain;
 
 /**
  * shoot 3 balls, drive forward to pickup 3 more balls,
  * return to starting position, shoot 3 more balls
  */
 public class SixBallAuto extends SequentialCommandGroup {
-    public SixBallAuto() {
+    public SixBallAuto(DriveTrain m_drivetrain) {
         super(
                 new InstantCommand(() -> Intake.getInstance().setDeployed(true)),
                 new AimAndShoot(3),
                 new ParallelDeadlineGroup(
-                        new DistanceDrive(-80),
+                        new DistanceDrive(m_drivetrain,-80),
                         new RunIntakeAuto()
                 ),
                 new RunIntakeAuto().withTimeout(0.5),
                 new ParallelDeadlineGroup(
-                        new DistanceDrive(80),
+                        new DistanceDrive(m_drivetrain,80),
                         new Shoot(SmartDashboard.getNumber("Shooter RPM Target", 0), true)),
                 new AimAndShoot(3)
         );

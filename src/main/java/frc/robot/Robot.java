@@ -68,7 +68,7 @@ public class Robot extends TimedRobot {
         CommandScheduler.getInstance().setDefaultCommand(Shooter.getInstance(), new Shoot());
         CommandScheduler.getInstance().setDefaultCommand(Intake.getInstance(), new RunIntake());
         CommandScheduler.getInstance().setDefaultCommand(Turret.getInstance(), new SpinTurret());
-        CommandScheduler.getInstance().setDefaultCommand(DriveTrain.getInstance(), new Drive());
+        CommandScheduler.getInstance().setDefaultCommand(robotContainer.getDrivetrainInstance(), new Drive(robotContainer.getDrivetrainInstance()));
 
         CommandScheduler.getInstance().setDefaultCommand(Magazine.getInstance(), new RunMagazine());
 
@@ -132,7 +132,7 @@ public class Robot extends TimedRobot {
         boolean showSmartDashInfo = true;
         boolean showShooterPowerInfo = true;
         if (showSmartDashInfo){
-            SmartDashboard.putNumber("Encoder Distance", DriveTrain.getInstance().getEncoderPosition());
+            SmartDashboard.putNumber("Encoder Distance", robotContainer.getDrivetrainInstance().getEncoderPosition());
             SmartDashboard.putNumber("Shooter RPM", Shooter.getInstance().getRPM());
             SmartDashboard.putNumber("Turret Pos", Turret.getInstance().getPosition());
             SmartDashboard.putNumber("Pos Degrees", Turret.getInstance().getDegreesPosition());

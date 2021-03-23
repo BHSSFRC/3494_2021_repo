@@ -10,20 +10,23 @@ public class TurnDegrees extends CommandBase {
     private double turnDegrees;
     private double currentDegrees;
     private double delta;
+    private DriveTrain m_drivetrain;
 
     //default constructor turns 0 degrees
-    public TurnDegrees() {
+    public TurnDegrees(DriveTrain drivetrain) {
         // If any subsystems are needed, you will need to pass them into the requires() method
-        addRequirements(DriveTrain.getInstance());
+        addRequirements(drivetrain);
+        this.m_drivetrain = drivetrain;
         this.turnDegrees = 90.0;
     }
 
     /**
      * @param degrees should be between -180 and 180, the number of degrees the robot should rotate
      */
-    public TurnDegrees(double degrees) {
+    public TurnDegrees(DriveTrain drivetrain, double degrees) {
         // If any subsystems are needed, you will need to pass them into the requires() method
-        addRequirements(DriveTrain.getInstance());
+        addRequirements(drivetrain);
+        this.m_drivetrain = drivetrain;
         this.turnDegrees = degrees;
     }
 
@@ -52,7 +55,7 @@ public class TurnDegrees extends CommandBase {
         }
         output *= RobotConfig.DRIVE_STRAIGHT.TURN_SPEED;
 
-        DriveTrain.getInstance().tankDrive(output, -output);
+        m_drivetrain.tankDrive(output, -output);
     }
 
     @Override
@@ -62,6 +65,6 @@ public class TurnDegrees extends CommandBase {
 
     @Override
     public void end(boolean interrupted){
-        DriveTrain.getInstance().stop();
+        m_drivetrain.stop();
     }
 }

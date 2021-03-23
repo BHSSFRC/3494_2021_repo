@@ -7,11 +7,12 @@ import frc.robot.RobotConfig;
 import frc.robot.commands.Shoot;
 import frc.robot.commands.drive.DistanceDrive;
 import frc.robot.commands.teleop.RunHopperMagazine;
+import frc.robot.subsystems.DriveTrain;
 
 //Shoot balls and drive forward
 //currently robot does not turn at any point during this command
 public class FireTurnDrive extends SequentialCommandGroup {
-    public FireTurnDrive(double distance) {
+    public FireTurnDrive(DriveTrain m_drivetrain, double distance) {
         super(
                 new Shoot(RobotConfig.FIRE_TURN_DRIVE.SHOOTER_POWER).withTimeout(RobotConfig.FIRE_TURN_DRIVE.SHOOT_TIMEOUT),
                 new ParallelCommandGroup(
@@ -19,7 +20,7 @@ public class FireTurnDrive extends SequentialCommandGroup {
                         new RunHopperMagazine()).withTimeout(RobotConfig.FIRE_TURN_DRIVE.HOPPER_MAGAZINE_TIMEOUT),
                 //new TurnDegrees(RobotConfig.FIRE_TURN_DRIVE.TURN_AMOUNT_DEGREES)
                 //        .withTimeout(RobotConfig.FIRE_TURN_DRIVE.TURN_DEGREES_TIMEOUT),
-                new DistanceDrive(distance).withTimeout(RobotConfig.FIRE_TURN_DRIVE.DISTANCE_DRIVE_TIMEOUT)
+                new DistanceDrive(m_drivetrain, distance).withTimeout(RobotConfig.FIRE_TURN_DRIVE.DISTANCE_DRIVE_TIMEOUT)
         );
     }
 }

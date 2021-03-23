@@ -8,9 +8,11 @@ import frc.robot.subsystems.DriveTrain;
 
 //Arcade Drive
 public class Drive extends CommandBase {
+    private DriveTrain m_drivetrain;
 
-    public Drive() {
-        addRequirements(DriveTrain.getInstance());
+    public Drive(DriveTrain drivetrain){
+        addRequirements(drivetrain);
+        m_drivetrain = drivetrain;
     }
 
     @Override
@@ -38,7 +40,7 @@ public class Drive extends CommandBase {
         double leftSpeed = powerCurve(OI.getINSTANCE().getLeftFlightY());
         double rightSpeed = powerCurve(OI.getINSTANCE().getRightFlightY());
 
-        DriveTrain.getInstance().tankDrive(leftSpeed, rightSpeed);
+        m_drivetrain.tankDrive(leftSpeed, rightSpeed);
     }
 
     private static double powerCurve(double x) {
@@ -53,6 +55,6 @@ public class Drive extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        DriveTrain.getInstance().stop();
+        m_drivetrain.stop();
     }
 }
