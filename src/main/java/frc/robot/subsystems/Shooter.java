@@ -40,9 +40,9 @@ public class Shooter extends SubsystemBase {
     public enum Position
     {
         ONE(DoubleSolenoid.Value.kReverse, DoubleSolenoid.Value.kReverse), 
-        TWO(DoubleSolenoid.Value.kForward, DoubleSolenoid.Value.kForward),
-        TWOPOINTFIVE(DoubleSolenoid.Value.kReverse, DoubleSolenoid.Value.kForward),
-        THREE(DoubleSolenoid.Value.kForward, DoubleSolenoid.Value.kReverse);
+        TWO(DoubleSolenoid.Value.kReverse, DoubleSolenoid.Value.kForward),
+        THREE(DoubleSolenoid.Value.kForward, DoubleSolenoid.Value.kForward),
+        FOUR(DoubleSolenoid.Value.kForward, DoubleSolenoid.Value.kReverse);
 
         private final DoubleSolenoid.Value hood, limiter;
         
@@ -61,16 +61,16 @@ public class Shooter extends SubsystemBase {
 
         public Position prev() {
             if (this == Position.ONE) {
-                return Position.THREE;
+                return Position.FOUR;
             }
             else if (this == Position.TWO) {
                 return Position.ONE;
             }
-            else if (this == Position.TWOPOINTFIVE) {
+            else if (this == Position.THREE) {
                 return Position.TWO;
             }
-            else if (this == Position.THREE) {
-                return Position.TWOPOINTFIVE;
+            else if (this == Position.FOUR) {
+                return Position.THREE;
             }
             else
             {
@@ -84,12 +84,12 @@ public class Shooter extends SubsystemBase {
                 return Position.TWO;
             }
             else if (this == Position.TWO) {
-                return Position.TWOPOINTFIVE;
-            }
-            else if (this == Position.TWOPOINTFIVE) {
                 return Position.THREE;
             }
             else if (this == Position.THREE) {
+                return Position.FOUR;
+            }
+            else if (this == Position.FOUR) {
                 return Position.ONE;
             }
             else
@@ -98,22 +98,21 @@ public class Shooter extends SubsystemBase {
             }
         }
 
-        public static Position fromNumber(double number) {
-            int intNumber = (int) (number * 10);
-            switch (intNumber) {
+        public static Position fromNumber(int number) {
+            switch (number) {
                 default: return ONE;
-                case 20: return TWO;
-                case 25: return TWOPOINTFIVE;
-                case 30: return THREE;
+                case 2: return TWO;
+                case 3: return THREE;
+                case 4: return FOUR;
             }
         }
 
-        public double toNumber() {
+        public int toNumber() {
             switch (this) {
                 default: return 1;
                 case TWO: return 2;
-                case TWOPOINTFIVE: return 2.5;
                 case THREE: return 3;
+                case FOUR: return 4;
             }
         }
     }
@@ -129,7 +128,7 @@ public class Shooter extends SubsystemBase {
 
         public static Settings fromString(String setting) {
             String[] parameters = setting.split(":");
-            return new Settings(Double.parseDouble(parameters[0]), Position.fromNumber(Double.parseDouble(parameters[1])));
+            return new Settings(Double.parseDouble(parameters[0]), Position.fromNumber(Integer.parseInt(parameters[1])));
         }
 
         public String toString() {
@@ -260,16 +259,16 @@ public class Shooter extends SubsystemBase {
         if (position != this.currentPosition) {
             switch (this.currentPosition) {
                 case TWO:
-                    this.limiter.set(DoubleSolenoid.Value.kReverse);
-                    this.hood.set(DoubleSolenoid.Value.kReverse);
-                    break;
-                case TWOPOINTFIVE:
                     this.hood.set(DoubleSolenoid.Value.kForward);
                     Timer.delay(0.075);
                     this.limiter.set(DoubleSolenoid.Value.kReverse);
                     this.hood.set(DoubleSolenoid.Value.kReverse);
                     break;
                 case THREE:
+                    this.limiter.set(DoubleSolenoid.Value.kReverse);
+                    this.hood.set(DoubleSolenoid.Value.kReverse);
+                    break;
+                case FOUR:
                     this.limiter.set(DoubleSolenoid.Value.kReverse);
                     this.hood.set(DoubleSolenoid.Value.kReverse);
                     break;
@@ -282,15 +281,15 @@ public class Shooter extends SubsystemBase {
                     this.hood.set(DoubleSolenoid.Value.kForward);
                     Timer.delay(0.075);
                     this.limiter.set(DoubleSolenoid.Value.kForward);
-                    break;
-                case TWOPOINTFIVE:
-                    this.hood.set(DoubleSolenoid.Value.kForward);
-                    Timer.delay(0.075);
-                    this.limiter.set(DoubleSolenoid.Value.kForward);
                     Timer.delay(0.075);
                     this.hood.set(DoubleSolenoid.Value.kReverse);
                     break;
                 case THREE:
+                    this.hood.set(DoubleSolenoid.Value.kForward);
+                    Timer.delay(0.075);
+                    this.limiter.set(DoubleSolenoid.Value.kForward);
+                    break;
+                case FOUR:
                     this.hood.set(DoubleSolenoid.Value.kForward);
                     break;
             }

@@ -37,8 +37,8 @@ public class TeleopShooter extends CommandBase {
 
         if (OI.getINSTANCE().getXboxDpadDown()) shooterPosition = Shooter.Position.ONE;
         else if (OI.getINSTANCE().getXboxDpadLeft()) shooterPosition = Shooter.Position.TWO;
-        else if (OI.getINSTANCE().getXboxDpadRight()) shooterPosition = Shooter.Position.TWOPOINTFIVE;
-        else if (OI.getINSTANCE().getXboxDpadUp()) shooterPosition = Shooter.Position.THREE;
+        else if (OI.getINSTANCE().getXboxDpadRight()) shooterPosition = Shooter.Position.THREE;
+        else if (OI.getINSTANCE().getXboxDpadUp()) shooterPosition = Shooter.Position.FOUR;
 
         if (targetRPM > 0) {
             Shooter.getInstance().setPosition(shooterPosition);

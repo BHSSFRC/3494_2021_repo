@@ -28,7 +28,7 @@ public class RunIntake extends CommandBase {
     public void execute() {
         double running = OI.getINSTANCE().getXboxRightTrigger() + (OI.getINSTANCE().getSecondaryXboxY() ? -1 : 0);
         boolean reverse = OI.getINSTANCE().getSecondaryXboxY();
-        Intake.getInstance().runIntake(running * RobotConfig.MAGAZINE.INTAKE_DEFAULT_POWER);
+        Intake.getInstance().runIntake(running * RobotConfig.MAGAZINE.INTAKE_DEFAULT_POWER + (OI.getINSTANCE().getXboxRightBumper() ? RobotConfig.MAGAZINE.INTAKE_DEFAULT_POWER : 0));
         Intake.getInstance().setDeployed(running != 0);
     }
 
