@@ -18,7 +18,7 @@ import frc.robot.subsystems.Magazine;
  */
 public class IntakingRoutine extends SequentialCommandGroup {
     public IntakingRoutine() {
-        SmartDashboard.putBoolean("Intaking Routine", true);
+        SmartDashboard.putBoolean("Magazine/Intaking Routine", true);
         System.out.println("Start Intaking Routine");
         addCommands(
                 new ParallelDeadlineGroup(
@@ -28,17 +28,16 @@ public class IntakingRoutine extends SequentialCommandGroup {
                                 new RunMagazine(true, false, true, false).withInterrupt(() -> Robot.getLinebreakTop().lineBroken()),
                                 new InstantCommand(() -> System.out.println("Second Linebreak Sensor Tripped")),
                                 new RunMagazine(true, false, false, false).withInterrupt(() -> Robot.getLinebreakBottom().lineBroken()),
-                                new InstantCommand(() -> System.out.println("First Linebreak Sensor Tripped")),
-                                new RunMagazine(true, true, true, true).withTimeout(RobotConfig.MAGAZINE.TIME_FOR_REVERSE),
-                                new InstantCommand(() -> System.out.println(RobotConfig.MAGAZINE.TIME_FOR_REVERSE + " passed, Finish.")),
-                                new RunMagazine(false, false, false, false).withTimeout(0.1)
+                                new InstantCommand(() -> System.out.println("First Linebreak Sensor Tripped"))
+                                //new RunMagazine(false, false, true, true).withTimeout(RobotConfig.MAGAZINE.TIME_FOR_REVERSE),
+                                //new InstantCommand(() -> System.out.println(RobotConfig.MAGAZINE.TIME_FOR_REVERSE + " passed, Finish."))
                         ),
-                        new RunHopper()
-                ).withTimeout(10),
+                        new RunHopper(true, false)
+                ).withTimeout(30),
                 new InstantCommand(() -> Hopper.getInstance().stop()),
                 new InstantCommand(() -> Magazine.getInstance().stop()),
                 new InstantCommand(() -> System.out.println("Intaking Routine Finished"))
         );
-        SmartDashboard.putBoolean("Intaking Routine", false);
+        SmartDashboard.putBoolean("Magazine/Intaking Routine", false);
     }
 }

@@ -1,5 +1,8 @@
 package frc.robot;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -44,13 +47,14 @@ public class OI {
     private JoystickButton aimAndShoot;
     private JoystickButton distanceDrive;
     private JoystickButton enableAimbot;
+    private List<JoystickButton> shooterPresetButtons = new ArrayList<JoystickButton>();
 
     private ButtonBoard bb;
     private JoystickButton[] boardButtons;
 
     private OI(){
-        //leftFlight = new Joystick(RobotMap.OI.LEFT_FLIGHT);
-        //rightFlight = new Joystick(RobotMap.OI.RIGHT_FLIGHT);
+        leftFlight = new Joystick(RobotMap.OI.LEFT_FLIGHT);
+        rightFlight = new Joystick(RobotMap.OI.RIGHT_FLIGHT);
 
         primaryXbox = new XboxController(RobotMap.OI.PRIMARY_XBOX);
         secondaryXbox = new XboxController(RobotMap.OI.SECONDARY_XBOX);
@@ -67,7 +71,22 @@ public class OI {
         intakingRoutine = new JoystickButton(secondaryXbox, RobotMap.OI.INTAKING_ROUTINE);
         intakingRoutine.whenPressed(new IntakingRoutine().withTimeout(10).andThen(new InstantCommand(() -> System.out.println("Finish Intaking Routine"))));
 
-/*
+        aimAndShoot = new JoystickButton(secondaryXbox, RobotMap.OI.AIM_AND_SHOOT);
+        aimAndShoot.whenPressed(new AimAndShoot().withTimeout(20).andThen(new InstantCommand(() -> System.out.println("Finish Shooting Routine"))));
+        
+        //shooterPresetButtons
+
+        for (int i = 0; i < RobotMap.OI.SHOOTER_PRESET_BUTTONS.length; i++) {
+            final int joystickButtonIndex = i;
+            JoystickButton joystickButton = new JoystickButton(bb, RobotMap.OI.SHOOTER_PRESET_BUTTONS[joystickButtonIndex]);
+            joystickButton.whenPressed(() -> {
+                String loadedSetting = SmartDashboard.getStringArray("Shooter/Shooter Presets", RobotConfig.SHOOTER.PRESETS)[joystickButtonIndex];
+                if (loadedSetting != null) AimAndShoot.settings = Shooter.Settings.fromString(loadedSetting);
+                System.out.println("Set auto shooter setting to: " + loadedSetting);
+            });
+            shooterPresetButtons.add(joystickButton);
+        }
+        /*
         floorPickup = new JoystickButton(bb, RobotMap.OI.FLOOR_PICKUP);
         floorPickup.whileHeld(new FloorPickup());
         
@@ -75,7 +94,7 @@ public class OI {
         //quickTurretLimits.whenPressed(new QuickTurretLimit());
         enableAimbot = new JoystickButton(bb, RobotMap.OI.ENABLE_AIM_BOT);
         enableAimbot.whenPressed(new InstantCommand(() ->
-                SmartDashboard.putBoolean("Enable AimBot", !SmartDashboard.getBoolean("Enable AimBot", true))));
+                SmartDashboard.putBoolean("Shooter/Enable AimBot", !SmartDashboard.getBoolean("Shooter/Enable AimBot", true))));
 
         aimBot = new JoystickButton(bb, RobotMap.OI.AIM_BOT);
         aimBot.toggleWhenPressed(new AimBot());
@@ -99,7 +118,7 @@ public class OI {
         intakingRoutine.whenPressed(new IntakingRoutine().withTimeout(10).andThen(new InstantCommand(() -> System.out.println("Finish Intaking Routine"))));
 
         spinHopperMagazine = new JoystickButton(secondaryXbox, RobotMap.OI.SPIN_HOPPER_MAGAZINE);
-        spinHopperMagazine.whenPressed(new RunHopperMagazine());
+        spinHopperMagazine.whenPressed(new RunHopperMagazine(true, false));
         spinHopperMagazine.whenReleased(new StopHopperMagazine());
 
         leftTriggerPressed = new Trigger(() -> getSecondaryXboxLeftTriggerPressed());
@@ -112,7 +131,8 @@ public class OI {
         shooterHigh.whenActive(new InstantCommand(() -> Shooter.getInstance().setPosition(Shooter.Position.THREE)));
 
         aimAndShoot = new JoystickButton(bb, RobotMap.OI.AIM_AND_SHOOT);
-        aimAndShoot.whileHeld(new AimAndShoot(5).withInterrupt(() -> !this.aimAndShoot.get()));*/
+        aimAndShoot.whileHeld(new AimAndShoot(5).withInterrupt(() -> !this.aimAndShoot.get()));
+        */
     }
 
     public double getLeftFlightY(){

@@ -23,14 +23,14 @@ public class AimBot extends CommandBase {
     public void initialize() {
         Shooter.getInstance().setLedRings(true);
         
-        if (!SmartDashboard.getBoolean("Enable AimBot", false)){
+        if (!SmartDashboard.getBoolean("Shooter/Enable AimBot", false)){
             this.end(false);
         }
     }
 
     @Override
     public void execute() {
-        this.targetOffset = SmartDashboard.getNumber("target-x", 0);
+        this.targetOffset = SmartDashboard.getNumber("Turret/target-x", 0);
 
         if(targetOffset < 1.0 && targetOffset > -1.0){
             this.power = Math.abs(this.targetOffset) * .6;

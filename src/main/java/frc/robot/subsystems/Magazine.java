@@ -22,37 +22,21 @@ public class Magazine extends SubsystemBase {
         this.bottom.setInverted(true);
     }
 
-    public void runFront(boolean on, boolean reverse){
-        if(on){
-            if (reverse) this.front.set(ControlMode.PercentOutput, -RobotConfig.MAGAZINE.FRONT_MOTOR_DEFAULT_POWER);
-            else this.front.set(ControlMode.PercentOutput, RobotConfig.MAGAZINE.FRONT_MOTOR_DEFAULT_POWER);
-        }else{
-            this.front.set(ControlMode.PercentOutput, 0);
-        }
+    public void runFront(double power){
+        this.front.set(ControlMode.PercentOutput, power);
     }
 
-    public void runBottom(boolean on, boolean reverse){
-        if(on){
-            if (reverse) this.bottom.set(ControlMode.PercentOutput, -RobotConfig.MAGAZINE.BOTTOM_MOTOR_DEFAULT_POWER);
-            else this.bottom.set(ControlMode.PercentOutput, RobotConfig.MAGAZINE.BOTTOM_MOTOR_DEFAULT_POWER);
-        }else{
-            this.bottom.set(ControlMode.PercentOutput, 0);
-        }
+    public void runBottom(double power){
+        this.bottom.set(ControlMode.PercentOutput, power);
     }
 
-    public void runReverse(){
-        this.front.set(ControlMode.PercentOutput, -RobotConfig.MAGAZINE.FRONT_MOTOR_DEFAULT_POWER);
-        this.bottom.set(ControlMode.PercentOutput, -RobotConfig.MAGAZINE.BOTTOM_MOTOR_DEFAULT_POWER);
-    }
-
-    public void run(boolean front, boolean frontReverse, boolean bottom, boolean bottomReverse){
-        this.runFront(front, frontReverse);
-        this.runBottom(bottom, bottomReverse);
+    public void run(double front, double bottom){
+        this.runFront(front);
+        this.runBottom(bottom);
     }
 
     public void stop(){
-        this.runFront(false, false);
-        this.runBottom(false, false);
+        this.run(0, 0);
     }
 
     public static Magazine getInstance() {

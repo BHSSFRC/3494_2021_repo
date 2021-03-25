@@ -16,9 +16,9 @@ import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
  */
 public final class Constants {
     public static final class DriveConstants {
-      public static final double ksVolts = 0.207;
-        public static final double kvVoltSecondsPerMeter = 3.24;//8.0;//5.04;//3.24 is the actual value found by the characterization tool
-        public static final double kaVoltSecondsSquaredPerMeter = 0.318;
+      public static final double ksVolts = .682;//0.207;
+        public static final double kvVoltSecondsPerMeter = 2.14;//3.24;//8.0;//5.04;//3.24 is the actual value found by the characterization tool
+        public static final double kaVoltSecondsSquaredPerMeter = 0.542;//0.318;
         
         //TODO: test diff values of kP
         public static final double kPDriveVel = 11.7;//0.0//11.7

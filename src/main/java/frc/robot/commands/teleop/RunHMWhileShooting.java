@@ -32,9 +32,9 @@ public class RunHMWhileShooting extends CommandBase {
 
     @Override
     public void execute() {
-        if(!Robot.getLinebreakTop().lineBroken() || Shooter.getInstance().atTargetSpeed(this.targetRPM)){
+        if(Shooter.getInstance().atTargetSpeed(this.targetRPM)){
             Hopper.getInstance().spin(RobotConfig.MAGAZINE.HOPPER_DEFAULT_POWER);
-            Magazine.getInstance().run(true, false, true, false);
+            Magazine.getInstance().run(RobotConfig.MAGAZINE.FRONT_MOTOR_DEFAULT_POWER, RobotConfig.MAGAZINE.BOTTOM_MOTOR_DEFAULT_POWER);
         }else{
             Hopper.getInstance().stop();
             Magazine.getInstance().stop();

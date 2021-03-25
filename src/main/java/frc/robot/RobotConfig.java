@@ -34,7 +34,7 @@ public final class RobotConfig
     }
     public static class DRIVE {
         public static final double POWER_CURVE_EXPONENT = 2.8;
-        public static final String[] DRIVE_SCHEMES = { "Bork", "Emerson", "Hazel", "Katrina" };
+        public static final String[] DRIVE_SCHEMES = { "Brock", "Emerson", "Hazel", "Katrina" };
     }
 
     public static class DRIVE_STRAIGHT {
@@ -55,21 +55,23 @@ public final class RobotConfig
     }
 
     public static class MAGAZINE {
-        public static double FRONT_MOTOR_DEFAULT_POWER = 0.4;//SmartDashboard.getNumber("Front Magazine Power", 0.7);
-        public static double BOTTOM_MOTOR_DEFAULT_POWER = 0.5;//SmartDashboard.getNumber("Bottom Magazine Power", 0.7);
-        public static double HOPPER_DEFAULT_POWER = SmartDashboard.getNumber("Hopper Power", 0.8);
+        public static double FRONT_MOTOR_DEFAULT_POWER = SmartDashboard.getNumber("Magazine/Front Magazine Power", 0.7);
+        public static double BOTTOM_MOTOR_DEFAULT_POWER = SmartDashboard.getNumber("Magazine/Bottom Magazine Power", 0.7);
+        public static double HOPPER_DEFAULT_POWER = SmartDashboard.getNumber("Magazine/Hopper Power", 0.8);
         public static double INTAKE_DEFAULT_POWER = 0.6;
-        public static double TIME_FOR_REVERSE = 0.1;
+        public static double TIME_FOR_REVERSE = 0.8;
     }
 
     public static class SHOOTER {
         public static double PRESHOOTER_POWER = 0.3;
         public static double SHOOTER_MAX_POWER = .8;
         public static double PRESHOOTER_DELAY = 2;
+        public static int BALLS_NEED_SHOT = 4;
         public final double 
             kP = 0.0,
             kI = 0.0,
             kD = 0.0,
             kF = 0.0;
+        public static final String[] PRESETS = { "1000:1", "2000:2", "3000:3", "4000:4" };
     }
 }

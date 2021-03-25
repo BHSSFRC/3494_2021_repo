@@ -60,21 +60,23 @@ public class RobotMap {
         public static int SPIN_HOPPER_MAGAZINE = 6;
         public static int DISTANCE_DRIVE = 2;
         public static int INTAKING_ROUTINE = 1;
+        public static int AIM_AND_SHOOT = 3;
 
         //button board bindings
         public static int FLOOR_PICKUP = 8;
         
-
         public static int EJECT_BALLS = 5;
+
+        public static int[] SHOOTER_PRESET_BUTTONS = { 1, 2, 3, 4 };
 
 
         //Remove Climber from OI
-        /**
+        /*
         public static int RELEASE_CLIMBER = 12;
         public static int DRIVE_CLIMBER = 14;
         public static int REVERSE_CLIMBER = 13;
         public static int REVERSE_CLIMBER_SLOW = 5;
-        public static int SAFETY_CLIMBER  = 9;*/
+        public static int SAFETY_CLIMBER  = 9;
 
         //public static int QUICK_TURRET_LIMITS = 2;
         public static int ENABLE_AIM_BOT = 2;
@@ -86,7 +88,7 @@ public class RobotMap {
 
         public static int SHOOTER_LOW = 1;
         public static int SHOOTER_MED = 3;
-        public static int SHOOTER_HIGH = 6;
+        public static int SHOOTER_HIGH = 6;*/
     }
 
     public static class CLIMBER {

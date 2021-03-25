@@ -24,7 +24,7 @@ public class ReverseIntake extends CommandBase {
     @Override
     public void execute() {
         PreShooter.getInstance().spin(-RobotConfig.SHOOTER.PRESHOOTER_POWER);
-        Magazine.getInstance().runReverse();
+        Magazine.getInstance().run(-RobotConfig.MAGAZINE.FRONT_MOTOR_DEFAULT_POWER, -RobotConfig.MAGAZINE.BOTTOM_MOTOR_DEFAULT_POWER);
         Hopper.getInstance().spin(-RobotConfig.MAGAZINE.HOPPER_DEFAULT_POWER);
         Intake.getInstance().setDeployed(true);
         Intake.getInstance().runIntake(-.4);

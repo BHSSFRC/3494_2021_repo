@@ -5,7 +5,12 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
+import frc.robot.Robot;
+import frc.robot.RobotConfig;
+import frc.robot.commands.DoNothing;
 import frc.robot.commands.Shoot;
+import frc.robot.commands.turret.AimBot;
 import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.Magazine;
 import frc.robot.subsystems.Shooter;
@@ -17,28 +22,26 @@ import frc.robot.subsystems.Turret;
  * run shooter until the given number of balls have all launched
  */
 public class AimAndShoot extends SequentialCommandGroup {
-    public AimAndShoot(double targetRPM, int ballsToShoot) {
+    public static Shooter.Settings settings = new Shooter.Settings(SmartDashboard.getNumber("Shooter/Shooter RPM Target", 100), Shooter.Position.TWO);
+
+    public AimAndShoot() {
         //Preshooter should only start once target RPM is reached
         super(
-                new InstantCommand(() -> System.out.println("Aim and Shoot--RPM: " + targetRPM)),
-                new InstantCommand(() -> Shooter.getInstance().setPosition(Shooter.Position.TWO)),
-                new StopHopperMagazine(),
-                new ParallelCommandGroup(
-                        //new AimBot(),
-                        new Shoot(targetRPM, true)).withInterrupt(() -> Shooter.getInstance().atTargetSpeed(targetRPM) &&
-                                                            Turret.getInstance().atCameraSetpoint()),
-                new InstantCommand(() -> System.out.println("Turn on Hopper Magazine " + targetRPM)),
-                new ParallelDeadlineGroup(
-                        new CountBallsShot(ballsToShoot),
-                        new Shoot(targetRPM, true),
-                        new RunHMWhileShooting(targetRPM)
-                ).withTimeout(10)
+            new InstantCommand(() -> System.out.println("Aim and Shoot--RPM: " + settings.getRPM())),
+            new InstantCommand(() -> Shooter.getInstance().setPosition(settings.getPosition())),
+            new StopHopperMagazine(),
+            new ParallelCommandGroup(
+                new ConditionalCommand(new DoNothing(), new IntakingRoutine(), () -> Robot.getLinebreakBottom().lineBroken() && Robot.getLinebreakTop().lineBroken()),
+                //new AimBot(),
+                new Shoot(settings.getRPM())).withInterrupt(() -> Shooter.getInstance().atTargetSpeed(settings.getRPM()) && Turret.getInstance().atCameraSetpoint()
+            ),
+            new InstantCommand(() -> System.out.println("Turn on Hopper Magazine " + settings.getRPM())),
+            new ParallelDeadlineGroup(
+                new CountBallsShot(RobotConfig.SHOOTER.BALLS_NEED_SHOT),
+                new Shoot(settings.getRPM()),
+                new RunHMWhileShooting(settings.getRPM())
+            ).withTimeout(10)
         );
-    }
-
-    //runs command with the target RPM specified by the SmartDashboard
-    public AimAndShoot(int ballsToShoot){
-        this(SmartDashboard.getNumber("Shooter RPM Target", 0), ballsToShoot);
     }
 
     @Override
@@ -46,5 +49,6 @@ public class AimAndShoot extends SequentialCommandGroup {
         Shooter.getInstance().setPosition(Shooter.Position.ONE);
         Hopper.getInstance().stop();
         Magazine.getInstance().stop();
+        Shooter.getInstance().stop();
     }
 }

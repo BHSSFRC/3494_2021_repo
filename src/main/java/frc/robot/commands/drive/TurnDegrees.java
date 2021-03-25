@@ -44,7 +44,7 @@ public class TurnDegrees extends CommandBase {
     public void execute() {
         //this.currentDegrees = IMU.getInstance().getYaw() + 180;
         this.delta = (this.currentDegrees - this.setpoint) % 360;
-        //SmartDashboard.putNumber("DriveTurn Offset", delta);
+        //SmartDashboard.putNumber("DriveTrain/DriveTurn Offset", delta);
 
         double output = this.delta / 360;
         //should be between -1 and 1
