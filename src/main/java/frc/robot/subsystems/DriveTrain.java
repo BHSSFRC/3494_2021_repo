@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -84,6 +85,7 @@ public class DriveTrain extends SubsystemBase {
         SmartDashboard.putData("field", m_field2d);
         m_diffDrive = new DifferentialDrive(this.leftMaster, this.rightMaster);
         this.resetEncoders();
+        m_odometry.resetPosition(new Pose2d(0.0,0.0,new Rotation2d(0.0)),new Rotation2d(0.0));
     }
 
     public void getRPM(){
@@ -195,11 +197,13 @@ public class DriveTrain extends SubsystemBase {
     }
 
     public double getLeftEncoderPositionMeters(){
-        return (this.leftMaster.getSelectedSensorPosition() + this.leftSlave.getSelectedSensorPosition()) / 2 * RobotConfig.DRIVE_STRAIGHT.ENCODER_TICKS_PER_INCH * Constants.DriveConstants.INCHES_TO_METERS;
+        return this.leftMaster.getSelectedSensorPosition() * Constants.DriveConstants.RPM_TO_METERS;
+        //return (this.leftMaster.getSelectedSensorPosition() + this.leftSlave.getSelectedSensorPosition()) / 2 * RobotConfig.DRIVE_STRAIGHT.ENCODER_TICKS_PER_INCH * Constants.DriveConstants.INCHES_TO_METERS;
     }
 
     public double getRightEncoderPositionMeters(){
-        return (this.rightMaster.getSelectedSensorPosition() + this.rightSlave.getSelectedSensorPosition()) / 2 * RobotConfig.DRIVE_STRAIGHT.ENCODER_TICKS_PER_INCH * Constants.DriveConstants.INCHES_TO_METERS;
+        return this.rightMaster.getSelectedSensorPosition() * Constants.DriveConstants.RPM_TO_METERS;
+        //return (this.rightMaster.getSelectedSensorPosition() + this.rightSlave.getSelectedSensorPosition()) / 2 * RobotConfig.DRIVE_STRAIGHT.ENCODER_TICKS_PER_INCH * Constants.DriveConstants.INCHES_TO_METERS;
     }
 
     public double getEncoderPosition(){
@@ -212,15 +216,15 @@ public class DriveTrain extends SubsystemBase {
 
     @Override
     public void periodic() {
-        m_odometry.update(m_gyro.getRotation2d(), this.getLeftEncoderPositionMeters(), this.getLeftEncoderPositionMeters());
+        m_odometry.update(m_gyro.getRotation2d(), this.getLeftEncoderPositionMeters(), this.getRightEncoderPositionMeters());
         Translation2d translation = m_odometry.getPoseMeters().getTranslation();
         m_xEntry.setNumber(translation.getX());
         m_yEntry.setNumber(translation.getY());
 
         // Also update the Field2D object (so that we can visualize this in sim)
         m_field2d.setRobotPose(getPose());
-        SmartDashboard.putNumber("LeftDrivePosMeters", this.getLeftEncoderPositionMeters());
-        SmartDashboard.putNumber("RightDrivePosMeters", this.getRightEncoderPositionMeters());
+        SmartDashboard.putNumber("DriveTrain/LeftDrivePosMeters", this.getLeftEncoderPositionMeters());
+        SmartDashboard.putNumber("DriveTrain/RightDrivePosMeters", this.getRightEncoderPositionMeters());
     }
 
     //This method was removed because the DriveTrain instance is housed in the RobotContainer class
@@ -237,6 +241,9 @@ public class DriveTrain extends SubsystemBase {
   public DifferentialDriveWheelSpeeds getWheelSpeeds() {
     double leftVel = this.leftMaster.getSelectedSensorVelocity() * Constants.DriveConstants.RPM_TO_METERS_PER_SECOND;
     double rightVel = this.rightMaster.getSelectedSensorVelocity() * Constants.DriveConstants.RPM_TO_METERS_PER_SECOND;
+    SmartDashboard.putNumber("DriveTrain/LeftVel",leftVel);
+    SmartDashboard.putNumber("DriveTrain/RightVel",rightVel);
+    
     return new DifferentialDriveWheelSpeeds(leftVel, rightVel);
 }
 
@@ -245,6 +252,8 @@ public class DriveTrain extends SubsystemBase {
 * @return The pose
 */
 public Pose2d getPose() {
+    SmartDashboard.putNumber("DriveTrain/PoseMeterX",m_odometry.getPoseMeters().getTranslation().getX());
+    SmartDashboard.putNumber("DriveTrain/PoseMeterY",m_odometry.getPoseMeters().getTranslation().getY());
     return m_odometry.getPoseMeters();
 }
 
@@ -267,14 +276,22 @@ public void resetOdometry(Pose2d pose) {
  * @param rightVolts the commanded right output
  */
 public void tankDriveVolts(double leftVolts, double rightVolts) {
+    SmartDashboard.putNumber("DriveTrain/DriveLeftVolts",leftVolts);
+    SmartDashboard.putNumber("DriveTrain/DriveRightVolts", rightVolts);
     //Any inversions should happen here
     leftVolts = -Math.min(10,Math.max(-10,leftVolts));
     rightVolts = -Math.min(10,Math.max(-10,rightVolts));
-    SmartDashboard.putNumber("DriveLeftVolts",leftVolts);
-    SmartDashboard.putNumber("DriveRightVolts", rightVolts);
+
+    //Normalize leftVolts and rightVolts between -1 and 1 for ControlMode.PercentOutput
+    double leftPercentOutput = leftVolts / 12;
+    double rightPercentOutput = rightVolts / 12;
+
     
-    this.leftMaster.set(ControlMode.Current,leftVolts);
-    this.rightMaster.set(ControlMode.Current,rightVolts);
+    SmartDashboard.putNumber("DriveTrain/DriveLeftPercent",leftPercentOutput);
+    SmartDashboard.putNumber("DriveTrain/DriveRightPercent", rightPercentOutput);
+    
+    this.leftMaster.set(ControlMode.PercentOutput,leftPercentOutput);
+    this.rightMaster.set(ControlMode.PercentOutput,rightPercentOutput);
     
     m_diffDrive.feed();
 }
@@ -282,6 +299,8 @@ public void tankDriveVolts(double leftVolts, double rightVolts) {
 public void resetEncoders() {
     leftMaster.setSelectedSensorPosition(0);
     rightMaster.setSelectedSensorPosition(0);
+    leftSlave.setSelectedSensorPosition(0);
+    rightSlave.setSelectedSensorPosition(0);
 }
 
 

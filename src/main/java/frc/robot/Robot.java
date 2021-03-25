@@ -164,7 +164,7 @@ public class Robot extends TimedRobot {
         boolean showSmartDashInfo = true;
         boolean showShooterPowerInfo = true;
         if (showSmartDashInfo){
-            SmartDashboard.putNumber("DriveTrain/Encoder Distance", DriveTrain.getInstance().getEncoderPosition());
+            SmartDashboard.putNumber("DriveTrain/Encoder Distance", robotContainer.getDrivetrainInstance().getEncoderPosition());
             SmartDashboard.putNumber("Shooter/Shooter RPM", Shooter.getInstance().getRPM());
             SmartDashboard.putNumber("Turret/Turret Pos", Turret.getInstance().getPosition());
             SmartDashboard.putNumber("Turret/Pos Degrees", Turret.getInstance().getDegreesPosition());

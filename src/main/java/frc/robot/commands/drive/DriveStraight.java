@@ -83,7 +83,7 @@ public class DriveStraight extends CommandBase {
         double output = (input - this.initialYaw) * RobotConfig.DRIVE_STRAIGHT.kP_DUMB;
         //double output = this.pidController.calculate(this.initialYaw, this.timer.delta());
         //SmartDashboard.putNumber("DriveTrain/DriveStraight Offset", output);
-        DriveTrain.getInstance().tankDrive(power - output, power + output);
+        m_drivetrain.tankDrive(power - output, power + output);
     }
 
     private static double powerCurve(double x) {

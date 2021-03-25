@@ -76,6 +76,10 @@ public class TrajectoryBuilder {
       
           rightMeasurement.setNumber(m_drivetrain.getWheelSpeeds().rightMetersPerSecond);
           rightReference.setNumber(rightController.getSetpoint());
+          System.out.print(leftVolts);
+          System.out.print("   ");
+          System.out.print(rightVolts);
+          System.out.println(" Run AutoRamseteCommand()");
         };
       
         RamseteCommand ramseteCommand = new RamseteCommand(
@@ -91,7 +95,7 @@ public class TrajectoryBuilder {
           rightController,
           // RamseteCommand passes volts to the callback
           outputVolts,
-          m_drivetrain//, m_drivetrain//TODO: fix
+          m_drivetrain//
         );
       
         // Reset odometry to the starting pose of the trajectory.
@@ -101,7 +105,7 @@ public class TrajectoryBuilder {
         SequentialCommandGroup resetOdometry = new InstantCommand(() -> m_drivetrain.setGyroAngleZ(trajectory.getInitialPose().getRotation().getDegrees())).andThen(() -> m_drivetrain.resetOdometry(trajectory.getInitialPose())).andThen((() -> System.out.println("Reset odometry")));
         
         // Run path following command, then stop at the end.
-        return resetOdometry.andThen(ramseteCommand).andThen(() -> m_drivetrain.tankDriveVolts(0, 0)).andThen(() -> System.out.println("Finished driving auto trajectory path"));
+        return resetOdometry.andThen(ramseteCommand).andThen(() -> m_drivetrain.tankDriveVolts(0, 0)).andThen(() -> System.out.println(trajectory.sample(trajectoryTime-.01)));
       }
       
       public Trajectory getTrajectoryFromPathweaver(String trajectoryName){
@@ -110,12 +114,13 @@ public class TrajectoryBuilder {
         try {
           Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
           trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+          System.out.println("Starting Path");
+          DriverStation.reportWarning("Start Trajectory Path "+ trajectoryName,false);
         } catch (IOException ex) {
           DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
         }
       
-        System.out.println("Starting Path");
-        DriverStation.reportWarning("Start Trajectory Path "+ trajectoryName,false);
+        
       
         return trajectory;
       }

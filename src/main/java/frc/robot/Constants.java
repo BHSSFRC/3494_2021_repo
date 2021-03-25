@@ -23,7 +23,7 @@ public final class Constants {
         //TODO: test diff values of kP
         public static final double kPDriveVel = 11.7;//0.0//11.7
         
-        public static final double kTrackwidthMeters = 0.4;
+        public static final double kTrackwidthMeters = 0.65;
         public static final DifferentialDriveKinematics kDriveKinematics =
             new DifferentialDriveKinematics(kTrackwidthMeters);
 
@@ -31,13 +31,13 @@ public final class Constants {
         public static final double METERS_TO_INCHES = 39.37;
         public static final double ENCODER_TICKS_PER_INCH = 0.006012462923579616;
 
-        public static final double RPM_TO_METERS_PER_SECOND = 1 / (26.75*2*60);
-        public static final double RPM_TO_METERS = 1 / (26.75);// 1 / (25.5*4);
+        public static final double RPM_TO_METERS_PER_SECOND = 1 / (50271.2*60);//1 / (26.75*2*60);
+        public static final double RPM_TO_METERS = 1 / (50271.2); //1 / (26.75);// 1 / (25.5*4);
       }
     
       public static final class AutoConstants {
-        public static final double kMaxSpeedMetersPerSecond = 2.0;//0.8;//3.0;
-        public static final double kMaxAccelerationMetersPerSecondSquared = 2.0;//0.8;//3.0;
+        public static final double kMaxSpeedMetersPerSecond = 4.0;//0.8;//3.0;
+        public static final double kMaxAccelerationMetersPerSecondSquared = 3.0;//0.8;//3.0;
     
         // Reasonable baseline values for a RAMSETE follower in units of meters and seconds
         public static final double kRamseteB = 2;

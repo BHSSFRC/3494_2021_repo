@@ -69,12 +69,13 @@ public class RobotContainer
     
         //Add all trajectory options to SmartDashboard choosers
         System.out.println("Start to initialize all trajectories");
-        m_chooser.setDefaultOption("drive", m_drivetrain.getDefaultCommand());
+        m_chooser.setDefaultOption("Slalom", m_trajectoryBuilder.getAutoRamseteCommand(m_trajectoryBuilder.getTrajectoryFromPathweaver("Slalom")));
+        m_chooser.addOption("drive", m_drivetrain.getDefaultCommand());
         m_chooser.addOption("FireTurnDrive Forward",new FireTurnDrive(m_drivetrain, 40).withTimeout(15));
         m_chooser.addOption("FireTurnDrive Backward",new FireTurnDrive(m_drivetrain, -40).withTimeout(15));
         m_chooser = m_trajectoryBuilder.addAllTrajectoryCommandsToChooser(m_chooser);
         
-        SmartDashboard.putData(m_chooser);
+        SmartDashboard.putData("Controls/AutoChooser",m_chooser);
       }
 
     /**
