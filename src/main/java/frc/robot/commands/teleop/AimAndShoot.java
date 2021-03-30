@@ -22,7 +22,7 @@ import frc.robot.subsystems.Turret;
  * run shooter until the given number of balls have all launched
  */
 public class AimAndShoot extends SequentialCommandGroup {
-    public static Shooter.Settings settings = new Shooter.Settings(SmartDashboard.getNumber("Shooter/Shooter RPM Target", 100), Shooter.Position.TWO);
+    public static Shooter.Settings settings = new Shooter.Settings(SmartDashboard.getNumber("Shooter/Shooter RPM Target", 100), Shooter.Position.fromNumber((int) SmartDashboard.getNumber("Shooter/Shooter Hood", 1)));
 
     public AimAndShoot() {
         //Preshooter should only start once target RPM is reached

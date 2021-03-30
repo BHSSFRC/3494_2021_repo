@@ -29,7 +29,7 @@ public class Drive extends CommandBase {
             speed *= SmartDashboard.getNumber("Controls/Drive Max Power", 1.0);
             rotation *= SmartDashboard.getNumber("Controls/Turn Max Power", 1.0);
 
-            if (OI.getINSTANCE().getPrimaryXboxA()) speed *= SmartDashboard.getNumber("Controls/Slow Mode Percent", 0.2);
+            if (OI.getINSTANCE().getPrimaryXboxLeftBumper()) speed = Math.copySign(1, speed);
 
             DriveTrain.getInstance().arcadeDrive(speed, rotation, true);
         } else if (driveScheme.equals(RobotConfig.DRIVE.DRIVE_SCHEMES[1])) {
@@ -38,7 +38,7 @@ public class Drive extends CommandBase {
             speed *= SmartDashboard.getNumber("Controls/Drive Max Power", 1.0);
             rotation *= SmartDashboard.getNumber("Controls/Turn Max Power", 1.0);
 
-            if (OI.getINSTANCE().getPrimaryXboxA()) speed *= SmartDashboard.getNumber("Controls/Slow Mode Percent", 0.2);
+            if (OI.getINSTANCE().getPrimaryXboxLeftBumper()) speed = Math.copySign(1, speed);
 
             DriveTrain.getInstance().arcadeDrive(speed, rotation, true);
         } else if (driveScheme.equals(RobotConfig.DRIVE.DRIVE_SCHEMES[2])) {
@@ -47,9 +47,9 @@ public class Drive extends CommandBase {
             leftSpeed *= SmartDashboard.getNumber("Controls/Drive Max Power", 1.0);
             rightSpeed *= SmartDashboard.getNumber("Controls/Drive Max Power", 1.0);
 
-            if (OI.getINSTANCE().getPrimaryXboxA()) {
-                leftSpeed *= SmartDashboard.getNumber("Controls/Slow Mode Percent", 0.2);
-                rightSpeed *= SmartDashboard.getNumber("Controls/Slow Mode Percent", 0.2);
+            if (OI.getINSTANCE().getPrimaryXboxLeftBumper()) {
+                leftSpeed = Math.copySign(1, leftSpeed);
+                rightSpeed = Math.copySign(1, rightSpeed);
             }
 
             DriveTrain.getInstance().tankDrive(leftSpeed, rightSpeed);
@@ -59,7 +59,7 @@ public class Drive extends CommandBase {
             speed *= SmartDashboard.getNumber("Controls/Drive Max Power", 1.0);
             rotation *= SmartDashboard.getNumber("Controls/Turn Max Power", 1.0);
 
-            if (OI.getINSTANCE().getPrimaryXboxA()) speed *= SmartDashboard.getNumber("Controls/Slow Mode Percent", 0.2);
+            if (OI.getINSTANCE().getPrimaryXboxLeftBumper()) speed = Math.copySign(1, speed);
 
             DriveTrain.getInstance().arcadeDrive(speed, rotation, true);
         }

@@ -6,12 +6,14 @@ import frc.robot.OI;
 import frc.robot.RobotConfig;
 import frc.robot.subsystems.PreShooter;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Shooter.Position;
 import frc.robot.util.QuadTimer;
 
 public class TeleopShooter extends CommandBase {
     private double targetRPM;
     private QuadTimer timer;
     private Shooter.Position shooterPosition = Shooter.Position.ONE;
+    private boolean needToRereadShooterPosition = true;
 
     //Run shooter at the RPM specified by the Smart Dashboard
     public TeleopShooter() {
@@ -35,15 +37,19 @@ public class TeleopShooter extends CommandBase {
         targetRPM = OI.getINSTANCE().getXboxLeftTrigger() * SmartDashboard.getNumber("Shooter/Shooter RPM Target", 1);
         Shooter.getInstance().setRPM(targetRPM);
 
-        if (OI.getINSTANCE().getXboxDpadDown()) shooterPosition = Shooter.Position.ONE;
-        else if (OI.getINSTANCE().getXboxDpadLeft()) shooterPosition = Shooter.Position.TWO;
-        else if (OI.getINSTANCE().getXboxDpadRight()) shooterPosition = Shooter.Position.THREE;
-        else if (OI.getINSTANCE().getXboxDpadUp()) shooterPosition = Shooter.Position.FOUR;
-
+        
+        if (OI.getINSTANCE().getXboxDpadDown()) SmartDashboard.putNumber("Shooter/Shooter Hood", Shooter.Position.ONE.toNumber()); //shooterPosition = Shooter.Position.ONE;
+        else if (OI.getINSTANCE().getXboxDpadLeft()) SmartDashboard.putNumber("Shooter/Shooter Hood", Shooter.Position.TWO.toNumber()); //shooterPosition = Shooter.Position.TWO;
+        else if (OI.getINSTANCE().getXboxDpadRight()) SmartDashboard.putNumber("Shooter/Shooter Hood", Shooter.Position.THREE.toNumber()); //shooterPosition = Shooter.Position.THREE;
+        else if (OI.getINSTANCE().getXboxDpadUp()) SmartDashboard.putNumber("Shooter/Shooter Hood", Shooter.Position.FOUR.toNumber()); //shooterPosition = Shooter.Position.FOUR;
+        
         if (targetRPM > 0) {
+            if (needToRereadShooterPosition) shooterPosition = Position.fromNumber((int) SmartDashboard.getNumber("Shooter/Shooter Hood", Shooter.Position.ONE.toNumber()));
             Shooter.getInstance().setPosition(shooterPosition);
+            needToRereadShooterPosition = false;
         } else {
             Shooter.getInstance().setPosition(Shooter.Position.ONE);
+            needToRereadShooterPosition = true;
         }
 
         //}

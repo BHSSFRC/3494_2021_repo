@@ -48,6 +48,10 @@ public class OI {
     private JoystickButton distanceDrive;
     private JoystickButton enableAimbot;
     private List<JoystickButton> shooterPresetButtons = new ArrayList<JoystickButton>();
+    private JoystickButton zone1;
+    private JoystickButton zone2;
+    private JoystickButton zone3;
+    private JoystickButton zone4;
 
     private ButtonBoard bb;
     private JoystickButton[] boardButtons;
@@ -78,14 +82,73 @@ public class OI {
 
         for (int i = 0; i < RobotMap.OI.SHOOTER_PRESET_BUTTONS.length; i++) {
             final int joystickButtonIndex = i;
-            JoystickButton joystickButton = new JoystickButton(bb, RobotMap.OI.SHOOTER_PRESET_BUTTONS[joystickButtonIndex]);
-            joystickButton.whenPressed(() -> {
-                String loadedSetting = SmartDashboard.getStringArray("Shooter/Shooter Presets", RobotConfig.SHOOTER.PRESETS)[joystickButtonIndex];
-                if (loadedSetting != null) AimAndShoot.settings = Shooter.Settings.fromString(loadedSetting);
-                System.out.println("Set auto shooter setting to: " + loadedSetting);
+            shooterPresetButtons.add(new JoystickButton(primaryXbox, RobotMap.OI.SHOOTER_PRESET_BUTTONS[joystickButtonIndex]));
+            shooterPresetButtons.get(joystickButtonIndex).whenPressed(() -> {
+                String loadedSetting = RobotConfig.SHOOTER.PRESETS[joystickButtonIndex]; // SmartDashboard.getStringArray("Shooter/Shooter Presets", RobotConfig.SHOOTER.PRESETS)[joystickButtonIndex];
+                if (loadedSetting != null) {
+                    AimAndShoot.settings = Shooter.Settings.fromString(loadedSetting);
+                    SmartDashboard.putNumber("Shooter/Shooter RPM Target", AimAndShoot.settings.getRPM());
+                    SmartDashboard.putNumber("Shooter/Shooter Hood", AimAndShoot.settings.getPosition().toNumber());
+                }
+                System.out.println("Set shooters setting to: " + loadedSetting);
             });
-            shooterPresetButtons.add(joystickButton);
         }
+
+        /*zone1 = new JoystickButton(primaryXbox, RobotMap.OI.SHOOTER_PRESET_BUTTONS[4]);
+        zone1.whenPressed(() -> {
+            String loadedSetting = "1900:2"; // SmartDashboard.getStringArray("Shooter/Shooter Presets", RobotConfig.SHOOTER.PRESETS)[joystickButtonIndex];
+            if (loadedSetting != null) {
+                AimAndShoot.settings = Shooter.Settings.fromString(loadedSetting);
+                SmartDashboard.putNumber("Shooter/Shooter RPM Target", AimAndShoot.settings.getRPM());
+                SmartDashboard.putNumber("Shooter/Shooter Hood", AimAndShoot.settings.getPosition().toNumber());
+            }
+            System.out.println("Set shooter settings to: " + loadedSetting);
+        });
+
+        zone1 = new JoystickButton(primaryXbox, RobotMap.OI.SHOOTER_PRESET_BUTTONS[0]);
+        zone1.whenPressed(() -> {
+            String loadedSetting = "3300:3"; // SmartDashboard.getStringArray("Shooter/Shooter Presets", RobotConfig.SHOOTER.PRESETS)[joystickButtonIndex];
+            if (loadedSetting != null) {
+                AimAndShoot.settings = Shooter.Settings.fromString(loadedSetting);
+                SmartDashboard.putNumber("Shooter/Shooter RPM Target", AimAndShoot.settings.getRPM());
+                SmartDashboard.putNumber("Shooter/Shooter Hood", AimAndShoot.settings.getPosition().toNumber());
+            }
+            System.out.println("Set shooter settings to: " + loadedSetting);
+        });
+
+        zone2 = new JoystickButton(primaryXbox, RobotMap.OI.SHOOTER_PRESET_BUTTONS[1]);
+        zone2.whenPressed(() -> {
+            String loadedSetting = "2700:3"; // SmartDashboard.getStringArray("Shooter/Shooter Presets", RobotConfig.SHOOTER.PRESETS)[joystickButtonIndex];
+            if (loadedSetting != null) {
+                AimAndShoot.settings = Shooter.Settings.fromString(loadedSetting);
+                SmartDashboard.putNumber("Shooter/Shooter RPM Target", AimAndShoot.settings.getRPM());
+                SmartDashboard.putNumber("Shooter/Shooter Hood", AimAndShoot.settings.getPosition().toNumber());
+            }
+            System.out.println("Set shooter settings to: " + loadedSetting);
+        });
+
+        zone3 = new JoystickButton(primaryXbox, RobotMap.OI.SHOOTER_PRESET_BUTTONS[2]);
+        zone3.whenPressed(() -> {
+            String loadedSetting = "3300:4"; // SmartDashboard.getStringArray("Shooter/Shooter Presets", RobotConfig.SHOOTER.PRESETS)[joystickButtonIndex];
+            if (loadedSetting != null) {
+                AimAndShoot.settings = Shooter.Settings.fromString(loadedSetting);
+                SmartDashboard.putNumber("Shooter/Shooter RPM Target", AimAndShoot.settings.getRPM());
+                SmartDashboard.putNumber("Shooter/Shooter Hood", AimAndShoot.settings.getPosition().toNumber());
+            }
+            System.out.println("Set shooter settings to: " + loadedSetting);
+        });
+
+        zone4 = new JoystickButton(primaryXbox, RobotMap.OI.SHOOTER_PRESET_BUTTONS[3]);
+        zone4.whenPressed(() -> {
+            String loadedSetting = "3400:4"; // SmartDashboard.getStringArray("Shooter/Shooter Presets", RobotConfig.SHOOTER.PRESETS)[joystickButtonIndex];
+            if (loadedSetting != null) {
+                AimAndShoot.settings = Shooter.Settings.fromString(loadedSetting);
+                SmartDashboard.putNumber("Shooter/Shooter RPM Target", AimAndShoot.settings.getRPM());
+                SmartDashboard.putNumber("Shooter/Shooter Hood", AimAndShoot.settings.getPosition().toNumber());
+            }
+            System.out.println("Set shooter settings to: " + loadedSetting);
+        });*/
+
         /*
         floorPickup = new JoystickButton(bb, RobotMap.OI.FLOOR_PICKUP);
         floorPickup.whileHeld(new FloorPickup());
@@ -205,6 +268,10 @@ public class OI {
 
     public boolean getXboxLeftBumper(){
         return this.secondaryXbox.getBumper(GenericHID.Hand.kLeft);
+    }
+
+    public boolean getPrimaryXboxLeftBumper(){
+        return this.primaryXbox.getBumper(GenericHID.Hand.kLeft);
     }
 
     public boolean getXboxLeftBumperPressed(){

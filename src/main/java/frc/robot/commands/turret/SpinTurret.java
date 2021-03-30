@@ -1,5 +1,6 @@
 package frc.robot.commands.turret;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.OI;
 import frc.robot.subsystems.Turret;
@@ -18,7 +19,7 @@ public class SpinTurret extends CommandBase {
 
     @Override
     public void execute() {
-        double power = OI.getINSTANCE().getXboxRightX() * 0.4;
+        double power = OI.getINSTANCE().getXboxRightX() * SmartDashboard.getNumber("Turret/Turret Speed", 0.4);
         Turret.getInstance().spin(power);
     }
 

@@ -1,5 +1,7 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.XboxController;
+
 //this class contains hardware constants such as motor ports
 public class RobotMap {
     public static class DRIVETRAIN {
@@ -67,7 +69,7 @@ public class RobotMap {
         
         public static int EJECT_BALLS = 5;
 
-        public static int[] SHOOTER_PRESET_BUTTONS = { 1, 2, 3, 4 };
+        public static int[] SHOOTER_PRESET_BUTTONS = { 8, 1, 2, 3, 4 };
 
 
         //Remove Climber from OI

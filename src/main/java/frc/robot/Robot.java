@@ -54,9 +54,9 @@ public class Robot extends TimedRobot {
 
         String[] SDDoubles = {
             "Calibrate1", "Calibrate2", "Gain/FSP",
-            "Shooter/Shooter Max Power", "Shooter/Shooter RPM", "Shooter/Shooter Power Current", "Shooter/Shooter RPM Target", "Shooter/Shooter Left Power", "Shooter/Shooter Right Power", "Shooter/Shooter Left RPM", "Shooter/Shooter Right RPM", "Shooter/P Gain", "Shooter/I Gain", "Shooter/D Gain", "Shooter/I Zone", "Shooter/Feed Forward", "Shooter/Max Output", "Shooter/Min Output",
+            "Shooter/Shooter Max Power", "Shooter/Shooter RPM", "Shooter/Shooter Power Current", "Shooter/Shooter RPM Target", "Shooter/Shooter Left Power", "Shooter/Shooter Right Power", "Shooter/Shooter Left RPM", "Shooter/Shooter Right RPM", "Shooter/P Gain", "Shooter/I Gain", "Shooter/D Gain", "Shooter/I Zone", "Shooter/Feed Forward", "Shooter/Max Output", "Shooter/Min Output", "Shooter/Shooter Hood",
             "DriveTrain/Angle", "DriveTrain/Encoder Distance", "DriveTrain/Inches to Drive", "DriveTrain/DriveStraight Offset", "DriveTrain/DriveStraight Offset", "DriveTrain/PID P", "DriveTrain/PID I", "DriveTrain/PID D",
-            "Turret/Rotation(degrees)", "Turret/target-x", "Turret/target-y", "Turret/Target Area", "Turret/Turret Pos", "Turret/Pos Degrees",
+            "Turret/Rotation(degrees)", "Turret/target-x", "Turret/target-y", "Turret/Target Area", "Turret/Turret Pos", "Turret/Pos Degrees", "Turret/Turret Speed",
             "Controls/Drive Max Power", "Controls/Turn Max Power",
             "Magazine/Hopper Power", "Magazine/Front Magazine Power", "Magazine/Bottom Magazine Power", "Magazine/Preshooter Power"
         };

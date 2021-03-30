@@ -72,6 +72,6 @@ public final class RobotConfig
             kI = 0.0,
             kD = 0.0,
             kF = 0.0;
-        public static final String[] PRESETS = { "1000:1", "2000:2", "3000:3", "4000:4" };
+        public static String[] PRESETS = { "1800:2", "3300:3", "2700:3", "3300:4", "3400:4" };
     }
 }
